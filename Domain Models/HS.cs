@@ -150,22 +150,40 @@ namespace ClassLibrary1
     {
         static void Main(string[] args)
         {
-            // Eksempel på sælgerkontaktoplysninger og produkt
-            Seller potentialSeller = new Seller
+            // Eksempel på sælger med produkt 
+            Seller seller1 = new Seller
             {
-                Name = "Ben Dover",
-                PhoneNumber = "+45 42126969",
-                Email = "ben.dover@example.com",
+                Name = "Alice",
+                PhoneNumber = "+45 11111111",
+                Email = "alice@example.com",
+                Trusted = true,
+                Product = new HS
+                {
+                    Type = "Hardware",
+                    Name = "Gigabyte GeForce RTX 4090 GAMING OC 24G Grafikkort - 24GB GDDR6X - NVIDIA RTX 4090 - PCI Express 4.0 x16",
+                    AttackSurface = "None",
+                    State = "New",
+                    Version = 1.0,
+                    Description = "New 4090 graphicscard. Not used, and works really well",
+                    Price = 17999.95m
+                }
+            };
+
+            Seller seller2 = new Seller
+            {
+                Name = "Bob",
+                PhoneNumber = "+45 22222222",
+                Email = "bob@example.com",
                 Trusted = false,
                 Product = new HS
                 {
                     Type = "Hardware",
-                    Name = "Spy ETH",
-                    AttackSurface = "Network",
-                    State = "New",
-                    Version = 2.0,
-                    Description = "Backdoor Ethernet Cable",
-                    Price = 499.99m
+                    Name = "Cool Hardware",
+                    AttackSurface = "Peripheral",
+                    State = "Used",
+                    Version = 3.0,
+                    Description = "A cool hardware product",
+                    Price = 149.99m
                 }
             };
 
