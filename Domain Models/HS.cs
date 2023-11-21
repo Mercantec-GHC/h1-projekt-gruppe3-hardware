@@ -24,9 +24,17 @@ namespace ClassLibrary1
         public HS Product { get; set; } = new HS();
     }
 
+    public class ShoppingCartItem
+    {
+        public Seller Seller { get; set; }
+        public HS Product { get; set; }
+    }
+
     public class Marketplace
     {
         private List<Seller> sellers = new List<Seller>();
+        private List<ShoppingCartItem> shoppingCart = new List<ShoppingCartItem>();
+
         //Tilføj en sælger, så personen kan sælge produkter 
         public void AddSeller(Seller seller)
         {
@@ -43,6 +51,7 @@ namespace ClassLibrary1
                 Console.WriteLine("--------");
             }
         }
+
         //Viser alle trusted sælgere. (Sælgere med bedste rating)
         public void DisplayTrustedSellers()
         {
@@ -57,6 +66,7 @@ namespace ClassLibrary1
                 Console.WriteLine("--------");
             }
         }
+
         //Viser sælgere og deres produkter i forhold til deres pris 
         public void DisplaySellersByPrice()
         {
@@ -71,6 +81,7 @@ namespace ClassLibrary1
                 Console.WriteLine("--------");
             }
         }
+
         //Giver brugeren mulighed for at søge efter produkter. 
         public void SearchProduct(string productName)
         {
@@ -85,6 +96,7 @@ namespace ClassLibrary1
                 Console.WriteLine("--------");
             }
         }
+
         //Mulighed for at tilføje et produkt/annonce 
         public void CreateAd(string sellerName, string phoneNumber, string email, string productName, decimal price)
         {
@@ -96,14 +108,41 @@ namespace ClassLibrary1
                 Trusted = false,
                 Product = new HS
                 {
-                    Type = "Hardware", // Assuming it's always hardware for simplicity
+                    Type = "Hardware", // Sat til kun hardware, for at gøre det nemmere. Kan ændres senere, hvis software også skal tilføjes
                     Name = productName,
                     Price = price
                 }
             };
 
+            //Giver en besked om at annoncen er oprettet med produktnavn og sælgerens navn
             sellers.Add(newSeller);
             Console.WriteLine($"Ad created for '{productName}' by '{sellerName}'.");
+        }
+
+        //Tilføj til kurven 
+        public void AddToCart(Seller seller)
+        {
+            shoppingCart.Add(new ShoppingCartItem
+            {
+                Seller = seller,
+                Product = seller.Product
+            });
+
+            Console.WriteLine($"Product '{seller.Product.Name}' added to the shopping cart.");
+        }
+
+        //Vis kurven (For at vise hvad du har planer om at købe)
+        public void DisplayShoppingCart()
+        {
+            Console.WriteLine("Shopping Cart:");
+
+            foreach (var item in shoppingCart)
+            {
+                Console.WriteLine($"Seller: {item.Seller.Name}");
+                Console.WriteLine($"Product: {item.Product.Name}");
+                Console.WriteLine($"Price: {item.Product.Price:C}");
+                Console.WriteLine("--------");
+            }
         }
     }
 
@@ -111,22 +150,40 @@ namespace ClassLibrary1
     {
         static void Main(string[] args)
         {
-            // Eksempel på sælgerkontaktoplysninger og produkt
-            Seller potentialSeller = new Seller
+            // Eksempel på sælger med produkt 
+            Seller seller1 = new Seller
             {
-                Name = "Ben Dover",
-                PhoneNumber = "+45 42126969",
-                Email = "ben.dover@example.com",
+                Name = "Alice",
+                PhoneNumber = "+45 11111111",
+                Email = "alice@example.com",
+                Trusted = true,
+                Product = new HS
+                {
+                    Type = "Hardware",
+                    Name = "Gigabyte GeForce RTX 4090 GAMING OC 24G Grafikkort - 24GB GDDR6X - NVIDIA RTX 4090 - PCI Express 4.0 x16",
+                    AttackSurface = "None",
+                    State = "New",
+                    Version = 1.0,
+                    Description = "New 4090 graphicscard. Not used, and works really well",
+                    Price = 17999.95m
+                }
+            };
+
+            Seller seller2 = new Seller
+            {
+                Name = "Bob",
+                PhoneNumber = "+45 22222222",
+                Email = "bob@example.com",
                 Trusted = false,
                 Product = new HS
                 {
                     Type = "Hardware",
-                    Name = "Spy ETH",
-                    AttackSurface = "Network",
-                    State = "New",
-                    Version = 2.0,
-                    Description = "Backdoor Ethernet Cable",
-                    Price = 499.99m
+                    Name = "Cool Hardware",
+                    AttackSurface = "Peripheral",
+                    State = "Used",
+                    Version = 3.0,
+                    Description = "A cool hardware product",
+                    Price = 149.99m
                 }
             };
 
@@ -151,6 +208,12 @@ namespace ClassLibrary1
 
             // Vis alle sælgere igen, inklusive den nye annonce
             marketplace.DisplayAllSellers();
+
+            // Tilføj et produkt til indkøbskurven
+            marketplace.AddToCart(potentialSeller);
+
+            // Vis indkøbskurven
+            marketplace.DisplayShoppingCart();
         }
     }
 }
