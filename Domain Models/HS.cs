@@ -208,7 +208,7 @@ namespace ClassLibrary1
 
             // Opret en annonce
             marketplace.CreateAd("John Doe", "+45 12345678", "john.doe@example.com", "Gaming Mouse", 29.99m);
-
+                
             // Vis alle sælgere igen, inklusive den nye annonce
             marketplace.DisplayAllSellers();
 
