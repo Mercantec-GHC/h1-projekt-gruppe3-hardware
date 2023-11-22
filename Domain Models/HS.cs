@@ -192,7 +192,7 @@ namespace ClassLibrary1
 
             // Tilføj sælger til markedspladsen
             Marketplace marketplace = new Marketplace();
-            marketplace.AddSeller(potentialSeller);
+            marketplace.AddSeller(seller1);
 
             // Vis alle sælgere
             marketplace.DisplayAllSellers();
@@ -213,7 +213,7 @@ namespace ClassLibrary1
             marketplace.DisplayAllSellers();
 
             // Tilføj et produkt til indkøbskurven
-            marketplace.AddToCart(potentialSeller);
+            marketplace.AddToCart(seller1);
 
             // Vis indkøbskurven
             marketplace.DisplayShoppingCart();
