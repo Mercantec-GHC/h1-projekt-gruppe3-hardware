@@ -1,39 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BlazorApp.Data;
 
 namespace ClassLibrary1
 {
-    public class HS
-    {
-        public string Type { get; set; } = string.Empty;
-        public string? Name { get; set; }
-        public string? AttackSurface { get; set; }
-        public string? State { get; set; }
-        public double Version { get; set; }
-        public string? Description { get; set; }
-        public decimal Price { get; set; }
-    }
+    //public class HS
+    //{
+    //    public string Type { get; set; } = string.Empty;
+    //    public string? Name { get; set; }
+    //    public string? AttackSurface { get; set; }
+    //    public string? State { get; set; }
+    //    public double Version { get; set; }
+    //    public string? Description { get; set; }
+    //    public decimal Price { get; set; }
+    //}
 
-    public class Seller
-    {
-        public string? Name { get; set; }
-        public string? PhoneNumber { get; set; }
-        public string? Email { get; set; }
-        public bool Trusted { get; set; }
-        public HS Product { get; set; } = new HS();
-    }
+    //public class Seller
+    //{
+    //    public string? Name { get; set; }
+    //    public string? PhoneNumber { get; set; }
+    //    public string? Email { get; set; }
+    //    public bool Trusted { get; set; }
+    //    public HS Product { get; set; } = new HS();
+    //}
 
-    public class ShoppingCartItem
-    {
-        public Seller Seller { get; set; }
-        public HS Product { get; set; }
-    }
+    //public class ShoppingCartItem
+    //{
+    //    public Seller Seller { get; set; }
+    //    public HS Product { get; set; }
+    //}
 
     public class Marketplace
     {
         private List<Seller> sellers = new List<Seller>();
         private List<ShoppingCartItem> shoppingCart = new List<ShoppingCartItem>();
+
+        public Seller potentialSeller = new Seller();
 
         //Tilføj en sælger, så personen kan sælge produkter 
         public void AddSeller(Seller seller)
@@ -106,7 +109,7 @@ namespace ClassLibrary1
                 PhoneNumber = phoneNumber,
                 Email = email,
                 Trusted = false,
-                Product = new HS
+                Product = new Hardware
                 {
                     Type = "Hardware", // Sat til kun hardware, for at gøre det nemmere. Kan ændres senere, hvis software også skal tilføjes
                     Name = productName,
@@ -157,7 +160,7 @@ namespace ClassLibrary1
                 PhoneNumber = "+45 11111111",
                 Email = "alice@example.com",
                 Trusted = true,
-                Product = new HS
+                Product = new Hardware
                 {
                     Type = "Hardware",
                     Name = "Gigabyte GeForce RTX 4090 GAMING OC 24G Grafikkort - 24GB GDDR6X - NVIDIA RTX 4090 - PCI Express 4.0 x16",
@@ -175,7 +178,7 @@ namespace ClassLibrary1
                 PhoneNumber = "+45 22222222",
                 Email = "bob@example.com",
                 Trusted = false,
-                Product = new HS
+                Product = new Hardware
                 {
                     Type = "Hardware",
                     Name = "Cool Hardware",
