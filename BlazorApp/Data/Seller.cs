@@ -7,5 +7,6 @@
         public string? Email { get; set; }
         public bool Trusted { get; set; }
         public Hardware Product { get; set; } = new Hardware();
+
     }
 }
