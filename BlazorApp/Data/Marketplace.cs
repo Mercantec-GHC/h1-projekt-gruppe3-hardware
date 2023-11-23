@@ -2,7 +2,7 @@
 {
     public class Marketplace
     {
-        private List<Seller> sellers = new List<Seller>();
+        public List<Seller> sellers = new List<Seller>();
         private List<ShoppingCartItem> shoppingCart = new List<ShoppingCartItem>();
 
         public Seller potentialSeller = new Seller();
@@ -12,8 +12,9 @@
         {
             sellers.Add(seller);
         }
-        //Viser alle sælgere 
-        public void DisplayAllSellers()
+
+		//Viser alle sælgere 
+		public void DisplayAllSellers()
         {
             foreach (var seller in sellers)
             {
