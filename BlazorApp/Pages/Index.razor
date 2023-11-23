@@ -1,5 +1,6 @@
 ﻿@page "/"
 
+<<<<<<< HEAD
 <div class="header">
     <h1>Welcome to DarkHardware Hub</h1>
     <p>Explore our selection of quality hardware parts and components</p>
@@ -96,3 +97,28 @@
         color: #fff;
     }
 </style>
+@* @page "/"
+
+<PageTitle>DarkHadware Hub</PageTitle>
+
+<h1>Velkommen til Dark Hardware Hub!</h1>
+
+<h5>Den bedste side til salg af alt Hardware</h5>
+ *@
+@* 
+@using BlazorApp.Data
+@page "/"
+@inject BlazorApp.Data.Marketplace Marketplace
+
+<h1>Velkommen til Dark Hardware Hub!</h1>
+
+<h5>Den bedste side til salg af alt Hardware</h5>
+
+<p>Her er en liste over alle sælgere:</p>
+
+<ul>
+    @foreach (var seller in Marketplace.sellers)
+    {
+        <li>@seller.Name - @seller.Product.Name - @seller.Product.Price:C</li>
+    }
+</ul> *@
