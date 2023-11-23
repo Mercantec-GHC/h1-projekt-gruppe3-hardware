@@ -1,25 +1,41 @@
-﻿@* @page "/"
-
-<PageTitle>DarkHadware Hub</PageTitle>
-
-<h1>Velkommen til Dark Hardware Hub!</h1>
-
-<h5>Den bedste side til salg af alt Hardware</h5>
- *@
-
+﻿@page "/"
 @using BlazorApp.Data
-@page "/"
-@inject BlazorApp.Data.Marketplace Marketplace
 
-<h1>Velkommen til Dark Hardware Hub!</h1>
+<h1>Marketplace</h1>
 
-<h5>Den bedste side til salg af alt Hardware</h5>
+@foreach (var seller in sellers)
+{
+    <div>
+        <h2>@seller.Name</h2>
+        <p>@seller.Email</p>
+        <p>@seller.PhoneNumber</p>
+        <p>@seller.Product.Name</p>
+        <p>@seller.Product.Price</p>
+    </div>
+}
 
-<p>Her er en liste over alle sælgere:</p>
+@code {
+    private List<Seller> sellers;
 
-<ul>
-	@foreach (var seller in Marketplace.sellers)
-	{
-		<li>@seller.Name - @seller.Product.Name - @seller.Product.Price:C</li>
-	}
-</ul>
+    protected override async Task OnInitializedAsync()
+    {
+        sellers = await GetSellers();
+    }
+
+    private Task<List<Seller>> GetSellers()
+    {
+        try
+        {
+            // Her skal du implementere logikken til at hente sælgere fra din datakilde
+            List<Seller> sellers = new List<Seller>(); // Få sælgere fra datakilden
+
+            return Task.FromResult(sellers);
+        }
+        catch
+        {
+            // Hvis der opstår en fejl, returner en tom liste
+            return Task.FromResult(new List<Seller>());
+        }
+    }
+
+}
