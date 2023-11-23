@@ -1,6 +1,8 @@
 ﻿@page "/"
 @using BlazorApp.Data
 
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+
 <h1>Marketplace</h1>
 
 @foreach (var seller in sellers)
@@ -40,12 +42,6 @@
 
 }
 
-
-
-
-
-
-
 @* @page "/"
 
 <PageTitle>DarkHadware Hub</PageTitle>
@@ -54,7 +50,7 @@
 
 <h5>Den bedste side til salg af alt Hardware</h5>
  *@
-
+@* 
 @using BlazorApp.Data
 @page "/"
 @inject BlazorApp.Data.Marketplace Marketplace
@@ -70,4 +66,4 @@
     {
         <li>@seller.Name - @seller.Product.Name - @seller.Product.Price:C</li>
     }
-</ul>
+</ul> *@

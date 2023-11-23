@@ -1,0 +1,18 @@
+﻿@inherits LayoutComponentBase
+
+@using Microsoft.AspNetCore.Http
+@using System.Net
+@inject IHttpContextAccessor httpContextAccessor
+
+@Body
+
+@code {
+    protected override void OnInitialized()
+    {
+        if (httpContextAccessor.HttpContext != null &&
+            !httpContextAccessor.HttpContext.Response.HasStarted)
+        {
+            httpContextAccessor.HttpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
+        }
+    }
+}

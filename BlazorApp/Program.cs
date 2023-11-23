@@ -1,14 +1,10 @@
-using BlazorApp;
-using BlazorApp.Data;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<BlazorApp.Data.Marketplace>();
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
@@ -25,6 +21,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+// Place your middleware here...
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
