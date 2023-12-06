@@ -1,11 +1,12 @@
 --@block Her kan i skrive SQL scripts til at oprette jeres DB
-CREATE TABLE [dbo].[ShoppingCartItem]
+
+CREATE TABLE [dbo].[Seller]
 (
-	ShoppingCartItemID INT PRIMARY KEY IDENTITY(1,1),
-    SellerID INT,
-    HardwareID INT,
-    FOREIGN KEY (SellerID) REFERENCES Seller(SellerID),
-    FOREIGN KEY (HardwareID) REFERENCES Hardware(HardwareID)
+	SellerID INT PRIMARY KEY IDENTITY(1,1),
+    Name NVARCHAR(255) NOT NULL,
+    PhoneNumber NVARCHAR(20) NOT NULL,
+    Email NVARCHAR(255) NOT NULL,
+    Trusted BIT NOT NULL
 )
 
 CREATE TABLE [dbo].[Hardware]
@@ -22,11 +23,11 @@ CREATE TABLE [dbo].[Hardware]
     FOREIGN KEY (SellerID) REFERENCES Seller(SellerID)
 )
 
-CREATE TABLE [dbo].[Seller]
+CREATE TABLE [dbo].[ShoppingCartItem]
 (
-	SellerID INT PRIMARY KEY IDENTITY(1,1),
-    Name NVARCHAR(255) NOT NULL,
-    PhoneNumber NVARCHAR(20) NOT NULL,
-    Email NVARCHAR(255) NOT NULL,
-    Trusted BIT NOT NULL
+	ShoppingCartItemID INT PRIMARY KEY IDENTITY(1,1),
+    SellerID INT,
+    HardwareID INT,
+    FOREIGN KEY (SellerID) REFERENCES Seller(SellerID),
+    FOREIGN KEY (HardwareID) REFERENCES Hardware(HardwareID)
 )

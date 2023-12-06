@@ -1,0 +1,105 @@
+﻿@page "/contact"
+@using System.ComponentModel.DataAnnotations
+
+<h3>Kontakt os</h3>
+
+<EditForm Model="@contactModel" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label for="firstName">Fornavn:</label>
+        <InputText id="firstName" @bind-Value="contactModel.FirstName" class="form-control" />
+        <ValidationMessage For="@(() => contactModel.FirstName)" />
+    </div>
+
+    <div class="form-group">
+        <label for="lastName">Efternavn:</label>
+        <InputText id="lastName" @bind-Value="contactModel.LastName" class="form-control" />
+        <ValidationMessage For="@(() => contactModel.LastName)" />
+    </div>
+
+    <div class="form-group">
+        <label for="phoneNumber">Telefonnummer:</label>
+        <InputText id="phoneNumber" @bind-Value="contactModel.PhoneNumber" class="form-control" />
+        <ValidationMessage For="@(() => contactModel.PhoneNumber)" />
+    </div>
+
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <InputText id="email" @bind-Value="contactModel.Email" class="form-control" />
+        <ValidationMessage For="@(() => contactModel.Email)" />
+    </div>
+
+    <div class="form-group">
+        <label for="message">Besked:</label>
+        <InputTextArea id="message" @bind-Value="contactModel.Message" class="form-control" />
+        <ValidationMessage For="@(() => contactModel.Message)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Send besked</button>
+</EditForm>
+
+@code {
+    private ContactModel contactModel = new ContactModel();
+
+    private void HandleValidSubmit()
+    {
+        // Her kan du implementere logikken til at håndtere den indsendte formular
+        // f.eks. sende en email, gemme i en database, osv.
+        // For dette eksempel viser vi bare dataene i konsollen.
+        Console.WriteLine("Formular indsendt:");
+        Console.WriteLine($"Fornavn: {contactModel.FirstName}");
+        Console.WriteLine($"Efternavn: {contactModel.LastName}");
+        Console.WriteLine($"Telefonnummer: {contactModel.PhoneNumber}");
+        Console.WriteLine($"Email: {contactModel.Email}");
+        Console.WriteLine($"Besked: {contactModel.Message}");
+    }
+
+    private class ContactModel
+    {
+        [Required(ErrorMessage = "Fornavn skal udfyldes.")]
+        public string FirstName { get; set; }
+
+        [Required(ErrorMessage = "Efternavn skal udfyldes.")]
+        public string LastName { get; set; }
+
+        [Required(ErrorMessage = "Telefonnummer skal udfyldes.")]
+        public string PhoneNumber { get; set; }
+
+        [Required(ErrorMessage = "Email skal udfyldes.")]
+        [EmailAddress(ErrorMessage = "Indtast en gyldig email-adresse.")]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "Besked skal udfyldes.")]
+        public string Message { get; set; }
+    }
+}
+
+       <style>
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .input-validation-error {
+        color: #a94442;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+       </style>

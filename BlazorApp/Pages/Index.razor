@@ -1,10 +1,21 @@
 ﻿@page "/"
+@using Microsoft.Extensions.DependencyInjection
+@using Microsoft.EntityFrameworkCore
+
+
 
 <PageTitle>DarkHardware Hub</PageTitle>
 
+<div class="search-container">
+    <form @onsubmit="HandleSearch">
+        <input type="text" placeholder="Search products..." @bind="searchQuery" />
+        <button type="submit">Search</button>
+    </form>
+</div>
+
 <div class="header">
     <h1>Welcome to DarkHardware Hub</h1>
-    <p>Explore our selection of quality hardware parts and components</p>
+    <p>Newest Items For Sale</p>
 </div>
 
 <div class="product-list">
@@ -13,35 +24,54 @@
         <img src="geforce4090.png" alt="ASUS GeForce RTX 4090 TUF - Graphics Card">
         <h3>ASUS GeForce RTX 4090 TUF</h3>
         <p>Powerful graphics card designed for gaming and professional use. 24GB GDDR6X RAM.</p>
-        <p>Price: $14,995</p>
+        <p>Price: $1,995</p>
     </div>
 
     <!-- Produktkort 2 -->
     <div class="product-card" @onclick="() => VisProduktDetaljer(2)">
         <img src="geforce4090.png" alt="ASUS GeForce RTX 4090 TUF - Graphics Card">
         <h3>ASUS GeForce RTX 4090 TUF</h3>
-        <p>Powerful graphics card designed for gaming and professional use. 24GB GDDR6X RAM.</p>
-        <p>Price: $14,995</p>
+        <p>Used, but good powerful graphics card designed for gaming and professional use.</p>
+        <p>Price: $1,499</p>
     </div>
 
     <!-- Produktkort 3 -->
     <div class="product-card" @onclick="() => VisProduktDetaljer(3)">
         <img src="geforce4090.png" alt="ASUS GeForce RTX 4090 TUF - Graphics Card">
         <h3>ASUS GeForce RTX 4090 TUF</h3>
-        <p>Powerful graphics card designed for gaming and professional use. 24GB GDDR6X RAM.</p>
-        <p>Price: $14,995</p>
+        <p>The Graphics Card is dead, and doesn't work.'</p>
+        <p>Price: $600</p>
     </div>
 
     <!-- Gentag dette for flere produkter -->
 </div>
 
 @code {
+    private string searchQuery = "";
+
+    [Inject]
+    private DbContext context { get; set; }
+
+    // Konstruktør til initialisering af context
+    public Index()
+    {
+        context = new DbContext(new DbContextOptions<DbContext>());
+    }
+
+    void HandleSearch()
+    {
+        // Implementer søgelogik her, for eksempel filtrer produktlisten baseret på søgeforespørgslen
+
+        // Brug den filtrerede liste som din produktliste
+    }
+
     // Metode til at håndtere klik på "Se detaljer" knappen (IKKE TILFØJET ENDNU)
     void VisProduktDetaljer(int produktId)
     {
         // Implementer detaljer handling her
     }
 }
+
 
 <style>
     body {
@@ -93,4 +123,30 @@
     p {
         color: #fff;
     }
+
+    .search-container {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    form {
+        display: inline-block;
+    }
+
+    input {
+        padding: 10px;
+        width: 200px;
+    }
+
+    button {
+        padding: 10px;
+        background-color: #0373fc;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #0056b3;
+        }
 </style>

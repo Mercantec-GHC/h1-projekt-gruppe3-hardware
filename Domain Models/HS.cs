@@ -4,8 +4,7 @@ using System.Linq;
 using BlazorApp.Data;
 
 namespace ClassLibrary1
-
-
+{
     class Program
     {
         static void Main(string[] args)
@@ -24,7 +23,7 @@ namespace ClassLibrary1
                     AttackSurface = "None",
                     State = "New",
                     Version = 1.0,
-                    Description = "New 4090 graphicscard. Not used, and works really well",
+                    Description = "New 4090 graphics card. Not used, and works really well",
                     Price = 17999.95m
                 }
             };
@@ -65,7 +64,7 @@ namespace ClassLibrary1
 
             // Opret en annonce
             marketplace.CreateAd("John Doe", "+45 12345678", "john.doe@example.com", "Gaming Mouse", 29.99m);
-                
+
             // Vis alle sælgere igen, inklusive den nye annonce
             marketplace.DisplayAllSellers();
 
