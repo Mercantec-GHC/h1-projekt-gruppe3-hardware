@@ -1,15 +1,4 @@
--- Opret tabel for brugere
-CREATE TABLE Users
-(
-    Id INT PRIMARY KEY IDENTITY(1,1),
-    Name NVARCHAR(255) NOT NULL, 
-    PhoneNumber NVARCHAR(20) NOT NULL, 
-    Email NVARCHAR(255) NOT NULL, 
-    Trusted BIT,
-    ProductId INT FOREIGN KEY REFERENCES Products(Id)
-);
-
--- Opret tabel for produkter
+﻿-- Opret tabel for produkter
 CREATE TABLE Products
 (
     Id INT PRIMARY KEY IDENTITY(1,1),
@@ -21,3 +10,23 @@ CREATE TABLE Products
     Description NVARCHAR(MAX) NOT NULL,
     Price DECIMAL(18,2) NOT NULL, 
 );
+
+-- Opret tabel for brugere
+CREATE TABLE Users
+(
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    Name NVARCHAR(255) NOT NULL, 
+    PhoneNumber NVARCHAR(20) NOT NULL, 
+    Email NVARCHAR(255) NOT NULL, 
+    Trusted BIT,
+    ProductId INT FOREIGN KEY REFERENCES Products(Id)
+);
+
+CREATE TABLE Seller
+(
+  SellerID INT PRIMARY KEY IDENTITY(1,1),
+    Name NVARCHAR(255) NOT NULL,
+    PhoneNumber NVARCHAR(20) NOT NULL,
+    Email NVARCHAR(255) NOT NULL,
+    Trusted BIT NOT NULL
+)

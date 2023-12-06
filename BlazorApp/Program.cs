@@ -16,9 +16,8 @@ builder.Services.AddScoped<BlazorApp.Data.Marketplace>();
 builder.Services.AddHttpContextAccessor();
 
 // Register AppDbContext
-builder.Services.AddDbContext<DbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+builder.Services.AddDbContext<AppDbContext>(options =>
+  options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 

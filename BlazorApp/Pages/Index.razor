@@ -3,7 +3,6 @@
 @using Microsoft.EntityFrameworkCore
 
 
-
 <PageTitle>DarkHardware Hub</PageTitle>
 
 <div class="search-container">
@@ -54,12 +53,12 @@
     private string searchQuery = "";
 
     [Inject]
-    private DbContext context { get; set; }
+    private AppDbContext context { get; set; }
 
     // Konstruktør til initialisering af context
     public Index()
     {
-        context = new DbContext(new DbContextOptions<DbContext>());
+        context = new AppDbContext(new DbContextOptions<AppDbContext>());
     }
 
     void HandleSearch()
