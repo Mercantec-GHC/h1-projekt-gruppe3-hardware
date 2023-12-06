@@ -43,9 +43,8 @@
 
     private void HandleValidSubmit()
     {
-        // Her kan du implementere logikken til at håndtere den indsendte formular
+        // Her skal logikken til at håndtere den indsendte formular være
         // f.eks. sende en email, gemme i en database, osv.
-        // For dette eksempel viser vi bare dataene i konsollen.
         Console.WriteLine("Formular indsendt:");
         Console.WriteLine($"Fornavn: {contactModel.FirstName}");
         Console.WriteLine($"Efternavn: {contactModel.LastName}");
@@ -74,7 +73,12 @@
     }
 }
 
-       <style>
+<style>
+
+    body {
+        background: linear-gradient(to bottom, #052767, #3a0647); 
+        color: #fff; 
+    }
 
     .form-group {
         margin-bottom: 15px;
@@ -102,4 +106,4 @@
             background-color: #0056b3;
         }
 
-       </style>
+</style>

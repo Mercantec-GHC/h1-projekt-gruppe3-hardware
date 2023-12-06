@@ -7,43 +7,47 @@
 <PageTitle>DarkHardware Hub</PageTitle>
 
 <div class="search-container">
-    <form @onsubmit="HandleSearch">
-        <input type="text" placeholder="Search products..." @bind="searchQuery" />
-        <button type="submit">Search</button>
+    <form @onsubmit="HandleSearch" class="search-form">
+        <input type="text" placeholder="Search products..." @bind="searchQuery" class="search-input" />
+        <button type="submit" class="search-button">Search</button>
     </form>
 </div>
 
+
 <div class="header">
-    <h1>Welcome to DarkHardware Hub</h1>
     <p>Newest Items For Sale</p>
 </div>
 
 <div class="product-list">
     <!-- Produktkort 1 -->
     <div class="product-card" @onclick="() => VisProduktDetaljer(1)">
-        <img src="geforce4090.png" alt="ASUS GeForce RTX 4090 TUF - Graphics Card">
-        <h3>ASUS GeForce RTX 4090 TUF</h3>
-        <p>Powerful graphics card designed for gaming and professional use. 24GB GDDR6X RAM.</p>
-        <p>Price: $1,995</p>
+        <img src="FlipperZero.png" alt="Flipper Zero">
+        <div class="product-details">
+            <h3>Flipper Zero</h3>
+            <p>Unlock the world of possibilities with the Flipper Zero, your trusty sidekick in the realm of hacking and security exploration.</p>
+            <p class="price">Price: $100</p>
+        </div>
     </div>
 
     <!-- Produktkort 2 -->
     <div class="product-card" @onclick="() => VisProduktDetaljer(2)">
-        <img src="geforce4090.png" alt="ASUS GeForce RTX 4090 TUF - Graphics Card">
-        <h3>ASUS GeForce RTX 4090 TUF</h3>
-        <p>Used, but good powerful graphics card designed for gaming and professional use.</p>
-        <p>Price: $1,499</p>
+        <img src="UsbKiller.png" alt="Usb Killer">
+        <div class="product-details">
+            <h3>Usb Killer</h3>
+            <p>Powerful tool for security testing and awareness. Used, effective, ready."</p>
+            <p class="price">Price: $60</p>
+        </div>
     </div>
 
     <!-- Produktkort 3 -->
     <div class="product-card" @onclick="() => VisProduktDetaljer(3)">
-        <img src="geforce4090.png" alt="ASUS GeForce RTX 4090 TUF - Graphics Card">
-        <h3>ASUS GeForce RTX 4090 TUF</h3>
-        <p>The Graphics Card is dead, and doesn't work.'</p>
-        <p>Price: $600</p>
+        <img src="geforce4090.png" alt=" GeForce RTX 4090 - Graphics Card">
+        <div class="product-details">
+            <h3>GeForce RTX 4090</h3>
+            <p>The graphics card is not functioning; it's dead. Perhaps someone can fix it and get it working again.</p>
+            <p class="price">Price: $600</p>
+        </div>
     </div>
-
-    <!-- Gentag dette for flere produkter -->
 </div>
 
 @code {
@@ -75,7 +79,7 @@
 
 <style>
     body {
-        background-color: #fff;
+        background: linear-gradient(to bottom, #052767, #3a0647);
     }
 
     .header {
@@ -97,7 +101,9 @@
     }
 
     .product-card {
-        border: 1px solid #0373fc;
+        display: flex;
+        flex-direction: column;
+        border: 1px;
         background-color: #222;
         padding: 15px;
         margin: 10px;
@@ -112,11 +118,18 @@
             transform: scale(1.05);
         }
 
-    img {
-        max-width: 100%;
-        height: auto;
+    .product-details {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .price {
+        margin-top: auto;
+        background: linear-gradient(to right, #052767, #3a0647);
+        color: #fff;
+        padding: 10px;
         border-radius: 4px;
-        margin-bottom: 10px;
     }
 
     h3,
@@ -124,29 +137,42 @@
         color: #fff;
     }
 
-    .search-container {
+    .header {
         text-align: center;
         margin-bottom: 20px;
+        color: #fff;
     }
 
-    form {
-        display: inline-block;
+        .header h1, .header p {
+            font-size: 2em;
+        }
+
+
+    .search-form {
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    input {
+    .search-input {
         padding: 10px;
-        width: 200px;
+        width: 300px;
+        border: 1px solid #0373fc;
+        border-radius: 4px;
+        margin-right: 10px;
     }
 
-    button {
+    .search-button {
         padding: 10px;
         background-color: #0373fc;
         color: #fff;
         border: none;
         cursor: pointer;
+        border-radius: 4px;
     }
 
-        button:hover {
+        .search-button:hover {
             background-color: #0056b3;
         }
+
 </style>

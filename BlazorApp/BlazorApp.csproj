@@ -9,7 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\geforce4090.png" />
     <None Include="wwwroot\logo.png" />
   </ItemGroup>
 
