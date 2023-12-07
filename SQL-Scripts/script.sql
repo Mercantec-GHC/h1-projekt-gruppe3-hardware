@@ -1,23 +1,14 @@
--- Opret tabel for brugere
-CREATE TABLE Users
-(
-    Id INT PRIMARY KEY IDENTITY(1,1),
-    Name NVARCHAR(255) NOT NULL, 
-    PhoneNumber NVARCHAR(20) NOT NULL, 
-    Email NVARCHAR(255) NOT NULL, 
-    Trusted BIT,
-    ProductId INT FOREIGN KEY REFERENCES Products(Id)
+CREATE DATABASE WebshopDB;
+USE WebshopDB;
+
+CREATE TABLE Users (
+    UserId INT PRIMARY KEY IDENTITY,
+    UserName NVARCHAR(50) NOT NULL,
+    Email NVARCHAR(100) NOT NULL
 );
 
--- Opret tabel for produkter
-CREATE TABLE Products
-(
-    Id INT PRIMARY KEY IDENTITY(1,1),
-    Type NVARCHAR(50) NOT NULL,
-    Name NVARCHAR(255) NOT NULL,
-    AttackSurface NVARCHAR(255),
-    State NVARCHAR(255) NOT NULL,
-    Version FLOAT,
-    Description NVARCHAR(MAX) NOT NULL,
-    Price DECIMAL(18,2) NOT NULL, 
+CREATE TABLE Products (
+    ProductId INT PRIMARY KEY IDENTITY,
+    ProductName NVARCHAR(100) NOT NULL,
+    Price DECIMAL(10, 2) NOT NULL
 );
