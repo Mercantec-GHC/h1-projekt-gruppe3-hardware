@@ -8,5 +8,6 @@ CREATE TABLE Hardware (
     HardwareId INT PRIMARY KEY IDENTITY(1,1),
     Name NVARCHAR(100) NOT NULL,
     Price DECIMAL(18,2) NOT NULL,
-    SellerId INT FOREIGN KEY REFERENCES Seller(SellerId)
+    SellerId INT,
+    FOREIGN KEY (SellerId) REFERENCES Seller(SellerId)
 );
