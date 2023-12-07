@@ -3,6 +3,7 @@
 @using Microsoft.EntityFrameworkCore
 
 
+
 <PageTitle>DarkHardware Hub</PageTitle>
 
 <div class="search-container">
@@ -53,12 +54,12 @@
     private string searchQuery = "";
 
     [Inject]
-    private AppDbContext context { get; set; }
+    private DbContext context { get; set; }
 
     // Konstruktør til initialisering af context
     public Index()
     {
-        context = new AppDbContext(new DbContextOptions<AppDbContext>());
+        context = new DbContext(new DbContextOptions<DbContext>());
     }
 
     void HandleSearch()
@@ -83,8 +84,7 @@
 
     .header {
         text-align: center;
-        margin-bottom: 25px;
-        margin-top: 25px;
+        margin-bottom: 20px;
     }
 
         .header h1,
@@ -137,6 +137,11 @@
         color: #fff;
     }
 
+    .header {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #fff;
+    }
 
         .header h1, .header p {
             font-size: 2em;
