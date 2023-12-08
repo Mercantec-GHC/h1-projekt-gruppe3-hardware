@@ -86,7 +86,6 @@
     </div>
 </div>
 
-
 @code {
     List<Seller> users;
     List<Hardware> hardwareList;
@@ -98,6 +97,7 @@
 
     DatabaseManager dbManager;
 
+    // Metode kaldet ved siden initialisering.
     protected override void OnInitialized()
     {
         dbManager = new DatabaseManager();
@@ -105,6 +105,7 @@
         hardwareList = dbManager.GetHardware() ?? new List<Hardware>();
     }
 
+    // Fjerner en bruger fra listen og opdaterer brugerlisten.
     void RemoveUser(Seller user)
     {
         if (user != null)
@@ -114,6 +115,7 @@
         }
     }
 
+    // Fjerner et produkt fra listen og opdaterer produktlisten.
     void RemoveHardware(Hardware hardware)
     {
         if (hardware != null)
@@ -123,6 +125,7 @@
         }
     }
 
+    // Tilføjer en ny bruger og opdaterer brugerlisten.
     void AddUser()
     {
         Seller newUser = new Seller
@@ -134,11 +137,12 @@
         dbManager.AddSeller(newUser);
         users = dbManager.GetSellers();
 
-        // Clear input fields
+        // Rydder inputfelterne.
         newUserName = "";
         newUserEmail = "";
     }
 
+    // Tilføjer et nyt produkt og opdaterer produktlisten.
     void AddHardware()
     {
         Hardware newHardware = new Hardware
@@ -151,12 +155,9 @@
         dbManager.AddHardware(newHardware);
         hardwareList = dbManager.GetHardware();
 
-        // Clear input fields
+        // Rydder inputfelterne.
         newHardwareName = "";
         newHardwarePrice = 0;
         newHardwareSellerId = 0;
-
-
-
     }
 }
