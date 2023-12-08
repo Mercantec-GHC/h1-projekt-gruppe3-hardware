@@ -56,7 +56,7 @@
     [Inject]
     private DbContext context { get; set; }
 
-    // Konstruktør til initialisering af context
+    
     public Index()
     {
         context = new DbContext(new DbContextOptions<DbContext>());
