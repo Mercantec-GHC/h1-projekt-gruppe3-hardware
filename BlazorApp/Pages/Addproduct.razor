@@ -1,0 +1,59 @@
+﻿@using BlazorApp.Data
+
+@page "/tilfojprodukt"
+
+<h3>Tilføj Hardware Produkt</h3>
+
+@if (gemt)
+{
+    <p>Produktet er blevet gemt!</p>
+}
+else
+{
+    <form @onsubmit="GemProdukt">
+        <label>Sælger Navn:</label>
+        <input @bind="nytProdukt.Saelger.Navn" />
+
+        <label>Produkt Navn:</label>
+        <input @bind="nytProdukt.Navn" />
+
+        <label>Beskrivelse:</label>
+        <textarea @bind="nytProdukt.Beskrivelse"></textarea>
+
+        <label>Pris:</label>
+        <input type="number" @bind="nytProdukt.Pris" />
+
+        <!-- Tilføj flere input-felter efter behov -->
+
+        <button type="submit">Gem Produkt</button>
+    </form>
+}
+
+@code {
+    private HardwareProdukt nytProdukt = new HardwareProdukt();
+    private bool gemt = false;
+
+    // Injectér DatabaseService i komponenten
+    [Inject]
+    private DatabaseService databaseService { get; set; }
+
+    private void GemProdukt()
+    {
+        // Gem produktet i databasen ved at bruge DatabaseService
+        // Du skal implementere koden til at gemme dataene i din SQL-database her
+
+        // Kald AddHardware-metoden fra DatabaseService for at gemme produktet
+        databaseService.AddHardware(new Hardware
+        {
+            Name = nytProdukt.Navn,
+            Price = nytProdukt.Pris,
+            SellerId = databaseService.GetSellers().FirstOrDefault(s => s.Name == nytProdukt.Saelger.Navn)?.SellerId ?? 0
+            // Du skal tilpasse dette afhængigt af din model og databasestruktur
+        });
+
+        // Marker at produktet er blevet gemt
+        gemt = true;
+    }
+
+    // Resten af koden for Saelger og HardwareProdukt klasser
+}

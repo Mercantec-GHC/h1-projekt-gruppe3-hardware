@@ -13,7 +13,7 @@ namespace BlazorApp.Data
         public string? Name { get; set; }
         public string? AttackSurface { get; set; }
         public string? State { get; set; }
-        public double? Version { get; set; } // Ændret til double?
+        public double? Version { get; set; }
         public string? Description { get; set; }
         public decimal Price { get; set; }
         public int SellerId { get; set; }
