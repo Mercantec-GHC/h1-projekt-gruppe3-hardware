@@ -12,7 +12,7 @@ namespace ClassLibrary1
                 Name = "Alice",
                 PhoneNumber = "+45 11111111",
                 Email = "alice@example.com",
-                Trusted = true,
+                Trusted = 1,
                 Product = new Hardware
                 {
                     Type = "Hardware",
@@ -30,7 +30,7 @@ namespace ClassLibrary1
                 Name = "Bob",
                 PhoneNumber = "+45 22222222",
                 Email = "bob@example.com",
-                Trusted = false,
+                Trusted = 0,
                 Product = new Hardware
                 {
                     Type = "Hardware",
@@ -46,6 +46,7 @@ namespace ClassLibrary1
             // Tilføj sælger til markedspladsen
             Marketplace marketplace = new Marketplace();
             marketplace.AddSeller(seller1);
+            marketplace.AddSeller(seller2);
 
             // Vis alle sælgere
             marketplace.DisplayAllSellers();
@@ -61,7 +62,7 @@ namespace ClassLibrary1
 
             // Opret en annonce
             marketplace.CreateAd("John Doe", "+45 12345678", "john.doe@example.com", "Gaming Mouse", 29.99m);
-                
+
             // Vis alle sælgere igen, inklusive den nye annonce
             marketplace.DisplayAllSellers();
 

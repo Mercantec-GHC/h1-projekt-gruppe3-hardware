@@ -1,4 +1,5 @@
 ﻿@using BlazorApp.Data
+@using BlazorApp
 
 @page "/tilfojprodukt"
 
@@ -12,16 +13,16 @@ else
 {
     <form @onsubmit="GemProdukt">
         <label>Sælger Navn:</label>
-        <input @bind="nytProdukt.Saelger.Navn" />
+        <input @bind="nytProdukt.SellerName" />
 
         <label>Produkt Navn:</label>
-        <input @bind="nytProdukt.Navn" />
+        <input @bind="nytProdukt.Name" />
 
         <label>Beskrivelse:</label>
-        <textarea @bind="nytProdukt.Beskrivelse"></textarea>
+        <textarea @bind="nytProdukt.Description"></textarea>
 
         <label>Pris:</label>
-        <input type="number" @bind="nytProdukt.Pris" />
+        <input type="number" @bind="nytProdukt.Price" />
 
         <!-- Tilføj flere input-felter efter behov -->
 
@@ -30,12 +31,16 @@ else
 }
 
 @code {
-    private HardwareProdukt nytProdukt = new HardwareProdukt();
+    private Hardware nytProdukt = new Hardware();
     private bool gemt = false;
 
-    // Injectér DatabaseService i komponenten
-    [Inject]
-    private DatabaseService databaseService { get; set; }
+    DatabaseManager dbManager;
+
+    // Metode kaldet ved siden initialisering.
+    protected override void OnInitialized()
+    {
+        dbManager = new DatabaseManager();
+    }
 
     private void GemProdukt()
     {
@@ -43,17 +48,24 @@ else
         // Du skal implementere koden til at gemme dataene i din SQL-database her
 
         // Kald AddHardware-metoden fra DatabaseService for at gemme produktet
-        databaseService.AddHardware(new Hardware
-        {
-            Name = nytProdukt.Navn,
-            Price = nytProdukt.Pris,
-            SellerId = databaseService.GetSellers().FirstOrDefault(s => s.Name == nytProdukt.Saelger.Navn)?.SellerId ?? 0
-            // Du skal tilpasse dette afhængigt af din model og databasestruktur
-        });
+        // DbContext.AddHardware(new Hardware
+        //     {
+        //         Name = nytProdukt.Name,
+        //         Price = nytProdukt.Price,
+        //         SellerId = DbContext.GetSellers().FirstOrDefault(s => s.Name == nytProdukt.SellerName)?.SellerId ?? 0
+        //         // Du skal tilpasse dette afhængigt af din model og databasestruktur
+        //     });
+
+        dbManager.AddHardware(new Hardware
+            {
+                Name = nytProdukt.Name,
+                Price = nytProdukt.Price,
+                SellerId = dbManager.GetSellers().FirstOrDefault(s => s.Name == nytProdukt.SellerName)?.SellerId ?? 0
+
+            });
 
         // Marker at produktet er blevet gemt
         gemt = true;
     }
 
-    // Resten af koden for Saelger og HardwareProdukt klasser
 }

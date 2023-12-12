@@ -8,7 +8,7 @@ public class Seller
     public string Name { get; set; }
     public string PhoneNumber { get; set; }
     public string Email { get; set; }
-    public bool Trusted { get; set; }
+    public byte Trusted { get; set; }
     public int ProductId { get; set; }
 
     // Navigation property til Product

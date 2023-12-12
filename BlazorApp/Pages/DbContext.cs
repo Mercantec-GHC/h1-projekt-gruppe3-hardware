@@ -6,149 +6,138 @@ using System.Data;
 
 public class DatabaseManager
 {
-    // Forbindelsesstrengen til databasen
     string connectionString = "Server=(localdb)\\Local;Database=master;Integrated Security=True;";
 
-
-    // Metode til at hente alle sælgere fra databasen
     public List<Seller> GetSellers()
     {
-        List<Seller> sellers = new List<Seller>();
-
-        // Opretter en forbindelse til databasen
-        using (SqlConnection connection = new SqlConnection(connectionString))
-        {
-            connection.Open();  // Åbner forbindelsen
-
-            // SQL-kommando for at vælge alle rækker fra Seller-tabellen
-            using (SqlCommand command = new SqlCommand("SELECT * FROM Seller", connection))
-            using (SqlDataReader reader = command.ExecuteReader())  // Udfører kommandoen og returnerer en SqlDataReader
-            {
-                // Læser resultaterne og opretter Seller-objekter
-                while (reader.Read())
-                {
-                    Seller seller = new Seller
-                    {
-                        SellerId = (int)reader["SellerId"],
-                        Name = reader["Name"].ToString(),
-                        Email = reader["Email"].ToString()
-                    };
-
-                    sellers.Add(seller);  // Tilføjer hvert Seller-objekt til listen
-                }
-            }
-        }
-
-        return sellers;  // Returnerer listen med sælgere
+        return GetEntities<Seller>("SELECT * FROM Seller");
     }
 
-    // Metode til at hente alle hardwareenheder fra databasen
     public List<Hardware> GetHardware()
     {
-        List<Hardware> hardwareList = new List<Hardware>();
+        return GetEntities<Hardware>("SELECT * FROM Hardware");
+    }
 
-        // Opretter en forbindelse til databasen
+    public List<Seller> GetSellersByName(string name)
+    {
+        return GetEntities<Seller>("SELECT * FROM Seller WHERE Name LIKE @Name", ("@Name", $"%{name}%"));
+    }
+
+    public List<Hardware> GetHardwareByName(string name)
+    {
+        return GetEntities<Hardware>("SELECT * FROM Hardware WHERE Name LIKE @Name", ("@Name", $"%{name}%"));
+    }
+
+    public void AddSeller(Seller seller)
+    {
+        ExecuteNonQuery("INSERT INTO Seller (Name, Email) VALUES (@Name, @Email)",
+            ("@Name", seller.Name), ("@Email", seller.Email));
+    }
+
+    public void AddHardware(Hardware hardware)
+    {
+        ExecuteNonQuery("INSERT INTO Hardware (Name, Price, SellerId) VALUES (@Name, @Price, @SellerId)",
+            ("@Name", hardware.Name), ("@Price", hardware.Price), ("@SellerId", hardware.SellerId));
+    }
+
+    public void RemoveSeller(int sellerId)
+    {
+        ExecuteNonQuery("DELETE FROM Seller WHERE SellerId = @SellerId", ("@SellerId", sellerId));
+    }
+
+    public void RemoveHardware(int hardwareId)
+    {
+        ExecuteNonQuery("DELETE FROM Hardware WHERE HardwareId = @HardwareId", ("@HardwareId", hardwareId));
+    }
+
+    private List<T> GetEntities<T>(string query, params (string, object)[] parameters)
+    {
+        List<T> entities = new List<T>();
+
         using (SqlConnection connection = new SqlConnection(connectionString))
         {
-            connection.Open();  // Åbner forbindelsen
+            connection.Open();
 
-            // SQL-kommando for at vælge alle rækker fra Hardware-tabellen
-            using (SqlCommand command = new SqlCommand("SELECT * FROM Hardware", connection))
-            using (SqlDataReader reader = command.ExecuteReader())  // Udfører kommandoen og returnerer en SqlDataReader
+            using (SqlCommand command = new SqlCommand(query, connection))
             {
-                // Læser resultaterne og opretter Hardware-objekter
-                while (reader.Read())
-                {
-                    Hardware hardware = new Hardware
-                    {
-                        HardwareId = (int)reader["HardwareId"],
-                        Name = reader["Name"].ToString(),
-                        Price = (decimal)reader["Price"],
-                        SellerId = (int)reader["SellerId"]
-                    };
+                // Angiv kommandotypen som tekstkommando (Optional)
+                command.CommandType = CommandType.Text;
 
-                    hardwareList.Add(hardware);  // Tilføjer hver hardwareenhed til listen
+                foreach (var (paramName, paramValue) in parameters)
+                {
+                    command.Parameters.AddWithValue(paramName, paramValue ?? DBNull.Value);
+                }
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        T entity = Activator.CreateInstance<T>();
+
+                        foreach (var property in typeof(T).GetProperties())
+                        {
+                            string columnName = property.Name;
+
+                            try
+                            {
+                                if (property.PropertyType == typeof(int))
+                                {
+                                    if (!reader.IsDBNull(reader.GetOrdinal(columnName)))
+                                    {
+                                        property.SetValue(entity, Convert.ToInt32(reader[columnName]));
+                                    }
+                                }
+                                else if (property.PropertyType == typeof(decimal))
+                                {
+                                    if (!reader.IsDBNull(reader.GetOrdinal(columnName)))
+                                    {
+                                        property.SetValue(entity, Convert.ToDecimal(reader[columnName]));
+                                    }
+                                }
+                                else if (property.PropertyType == typeof(byte))
+                                {
+                                    if (!reader.IsDBNull(reader.GetOrdinal(columnName)))
+                                    {
+                                        property.SetValue(entity, Convert.ToByte(reader[columnName]));
+                                    }
+                                }
+                                else
+                                {
+                                    property.SetValue(entity, reader[columnName]?.ToString());
+                                }
+                            }
+                            catch (IndexOutOfRangeException ex)
+                            {
+                                // Log eller udskriv fejldetaljer for fejlfinding
+                                Console.WriteLine($"Fejl ved indstilling af egenskab {property.Name} fra kolonne {columnName}: {ex.Message}");
+                            }
+                        }
+
+                        entities.Add(entity);
+                    }
                 }
             }
         }
 
-        return hardwareList;  // Returnerer listen med hardwareenheder
+        return entities;
     }
 
-    // Metode til at tilføje en ny sælger til databasen
-    public void AddSeller(Seller seller)
+
+    private void ExecuteNonQuery(string query, params (string, object)[] parameters)
     {
-        // Opretter en forbindelse til databasen
         using (SqlConnection connection = new SqlConnection(connectionString))
         {
-            connection.Open();  // Åbner forbindelsen
+            connection.Open();
 
-            // SQL-kommando for at indsætte data i Seller-tabellen
-            using (SqlCommand command = new SqlCommand("INSERT INTO Seller (Name, Email) VALUES (@Name, @Email)", connection))
+            using (SqlCommand command = new SqlCommand(query, connection))
             {
-                command.Parameters.AddWithValue("@Name", seller.Name);
-                command.Parameters.AddWithValue("@Email", seller.Email);
+                foreach (var (paramName, paramValue) in parameters)
+                {
+                    command.Parameters.AddWithValue(paramName, paramValue ?? DBNull.Value);
+                }
 
-                command.ExecuteNonQuery();  // Udfører kommandoen uden at returnere data
+                command.ExecuteNonQuery();
             }
         }
     }
-
-    // Metode til at tilføje en ny hardwareenhed til databasen
-    public void AddHardware(Hardware hardware)
-    {
-        // Opretter en forbindelse til databasen
-        using (SqlConnection connection = new SqlConnection(connectionString))
-        {
-            connection.Open();  // Åbner forbindelsen
-
-            // SQL-kommando for at indsætte data i Hardware-tabellen
-            using (SqlCommand command = new SqlCommand("INSERT INTO Hardware (Name, Price, SellerId) VALUES (@Name, @Price, @SellerId)", connection))
-            {
-                command.Parameters.AddWithValue("@Name", hardware.Name);
-                command.Parameters.AddWithValue("@Price", hardware.Price);
-                command.Parameters.AddWithValue("@SellerId", hardware.SellerId);
-
-                command.ExecuteNonQuery();  // Udfører kommandoen uden at returnere data
-            }
-        }
-    }
-
-    // Metode til at fjerne en sælger baseret på sælgerens ID
-    public void RemoveSeller(int sellerId)
-    {
-        // Opretter en forbindelse til databasen
-        using (SqlConnection connection = new SqlConnection(connectionString))
-        {
-            connection.Open();  // Åbner forbindelsen
-
-            // SQL-kommando for at slette en sælger baseret på SellerId
-            using (SqlCommand command = new SqlCommand("DELETE FROM Seller WHERE SellerId = @SellerId", connection))
-            {
-                command.Parameters.AddWithValue("@SellerId", sellerId);
-
-                command.ExecuteNonQuery();  // Udfører kommandoen uden at returnere data
-            }
-        }
-    }
-
-    // Metode til at fjerne en hardwareenhed baseret på hardwareenhedens ID
-    public void RemoveHardware(int hardwareId)
-    {
-        // Opretter en forbindelse til databasen
-        using (SqlConnection connection = new SqlConnection(connectionString))
-        {
-            connection.Open();  // Åbner forbindelsen
-
-            // SQL-kommando for at slette en hardwareenhed baseret på HardwareId
-            using (SqlCommand command = new SqlCommand("DELETE FROM Hardware WHERE HardwareId = @HardwareId", connection))
-            {
-                command.Parameters.AddWithValue("@HardwareId", hardwareId);
-
-                command.ExecuteNonQuery();  // Udfører kommandoen uden at returnere data
-            }
-        }
-    }
-
-    // Implementér andre CRUD-operationer efter behov (Opdater, Slet)
 }

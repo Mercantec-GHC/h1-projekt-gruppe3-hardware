@@ -28,7 +28,8 @@
         //Viser alle trusted sælgere. (Sælgere med bedste rating)
         public void DisplayTrustedSellers()
         {
-            var trustedSellers = sellers.Where(seller => seller.Trusted);
+            var trustedSellers = sellers.Where(seller => seller.Trusted == 1);
+
 
             Console.WriteLine("Trusted Sellers:");
             foreach (var seller in trustedSellers)
@@ -78,7 +79,7 @@
                 Name = sellerName,
                 PhoneNumber = phoneNumber,
                 Email = email,
-                Trusted = false,
+                Trusted = 0,
                 Product = new Hardware
                 {
                     Type = "Hardware", // Sat til kun hardware, for at gøre det nemmere. Kan ændres senere, hvis software også skal tilføjes

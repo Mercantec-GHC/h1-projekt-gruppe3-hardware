@@ -1,0 +1,119 @@
+﻿@page "/allhardware"
+@using BlazorApp.Data
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(45deg, #f06, #9f6);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .hardware-list {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 800px;
+        text-align: center;
+        margin-top: 20px; 
+    }
+
+    h3 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    th, td {
+        padding: 10px;
+        border: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #00ff00;
+        color: #fff;
+    }
+</style>
+
+<div class="hardware-list">
+    <h3>Alle hardwareprodukter</h3>
+
+    @if (hardwareList != null && hardwareList.Any())
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Attack Surface</th>
+                    <th>State</th>
+                    <th>Version</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Seller Id</th>
+                    <th>Seller Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var hardware in hardwareList)
+                {
+                    <tr>
+                        <td>@hardware.Type</td>
+                        <td>@hardware.Name</td>
+                        <td>@hardware.AttackSurface</td>
+                        <td>@hardware.State</td>
+                        <td>@hardware.Version</td>
+                        <td>@hardware.Description</td>
+                        <td>@hardware.Price</td>
+                        <td>@hardware.SellerId</td>
+                        <td>@hardware.SellerName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Ingen hardwareprodukter fundet.</p>
+    }
+</div>
+
+@code {
+    private List<Hardware> hardwareList = new List<Hardware>();
+    private DbService dbService;
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+        string connectionString = "Server=(localdb)\\Local;Database=master;Integrated Security=True;";
+        dbService = new DbService(connectionString);
+
+        // Load hardware data from the database
+        await LoadHardwareList();
+    }
+
+    private async Task LoadHardwareList()
+    {
+        try
+        {
+           
+            hardwareList = await dbService.GetAllHardwareAsync();
+        }
+        catch (Exception ex)
+        {
+            //Error Handling (Log)
+            Console.WriteLine($"Error loading hardware list: {ex.Message}");
+        }
+    }
+}

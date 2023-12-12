@@ -1,7 +1,17 @@
 ﻿@page "/"
 @using Microsoft.Extensions.DependencyInjection
 @using Microsoft.EntityFrameworkCore
+@using BlazorApp.Data
 
+@code {
+    DatabaseManager dbManager;
+
+    // Metode kaldet ved siden initialisering.
+    protected override void OnInitialized()
+    {
+        dbManager = new DatabaseManager();
+    }
+}
 
 
 <PageTitle>DarkHardware Hub</PageTitle>
