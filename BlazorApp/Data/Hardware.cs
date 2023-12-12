@@ -9,7 +9,7 @@ namespace BlazorApp.Data
     public class Hardware
     {
         public int HardwareId { get; set; }
-        public string Type { get; set; } = string.Empty;
+        public string Type { get; set; }
         public string Name { get; set; }
         public string? AttackSurface { get; set; }
         public string? State { get; set; }

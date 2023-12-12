@@ -32,17 +32,22 @@ public class DbService
                 {
                     cmd.Connection = connection;
                     cmd.CommandType = CommandType.Text;
-                    cmd.CommandText = "INSERT INTO Hardware (Type, Name, AttackSurface, State, Version, Description, Price, SellerId, SellerName) VALUES (@Type, @Name, @AttackSurface, @State, @Version, @Description, @Price, @SellerId, @SellerName)";
+                    cmd.CommandText = "INSERT INTO Hardware (Name, Price, SellerId) VALUES (@Name, @Price, @SellerId)";
 
-                    cmd.Parameters.Add("@Type", SqlDbType.NVarChar).Value = (object)hardware.Type ?? DBNull.Value;
-                    cmd.Parameters.Add("@Name", SqlDbType.NVarChar).Value = (object)hardware.Name ?? DBNull.Value;
-                    cmd.Parameters.Add("@AttackSurface", SqlDbType.NVarChar).Value = (object)hardware.AttackSurface ?? DBNull.Value;
-                    cmd.Parameters.Add("@State", SqlDbType.NVarChar).Value = (object)hardware.State ?? DBNull.Value;
-                    cmd.Parameters.Add("@Version", SqlDbType.Decimal).Value = hardware.Version;
-                    cmd.Parameters.Add("@Description", SqlDbType.NVarChar).Value = (object)hardware.Description ?? DBNull.Value;
-                    cmd.Parameters.Add("@Price", SqlDbType.Decimal).Value = hardware.Price;
-                    cmd.Parameters.Add("@SellerId", SqlDbType.Int).Value = hardware.SellerId;
-                    cmd.Parameters.Add("@SellerName", SqlDbType.NVarChar).Value = (object)hardware.SellerName ?? DBNull.Value;
+
+
+                    cmd.Parameters.AddWithValue("@Type", (object)hardware.Type ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Name", (object)hardware.Name ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@AttackSurface", (object)hardware.AttackSurface ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@State", (object)hardware.State ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Version", hardware.Version);
+                    cmd.Parameters.AddWithValue("@Description", (object)hardware.Description ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Price", hardware.Price);
+                    cmd.Parameters.AddWithValue("@SellerId", hardware.SellerId);
+                    cmd.Parameters.AddWithValue("@SellerName", (object)hardware.SellerName ?? DBNull.Value);
+
+                    Console.WriteLine(hardware.Version);
+
 
                     await cmd.ExecuteNonQueryAsync();
                 }
@@ -75,20 +80,30 @@ public class DbService
                     {
                         while (await reader.ReadAsync())
                         {
-                            Hardware hardware = new Hardware
+                            try
                             {
-                                Type = reader["Type"].ToString(),
-                                Name = reader["Name"].ToString(),
-                                AttackSurface = reader["AttackSurface"].ToString(),
-                                State = reader["State"].ToString(),
-                                Version = (double)reader["Version"],
-                                Description = reader["Description"].ToString(),
-                                Price = (decimal)reader["Price"],
-                                SellerId = (int)reader["SellerId"],
-                                SellerName = reader["SellerName"].ToString()
-                            };
+                                Hardware hardware = new Hardware
+                                {
+                                    HardwareId = reader.GetInt32(reader.GetOrdinal("HardwareId")),
+                                    Type = reader["Type"] == DBNull.Value ? null : reader.GetString(reader.GetOrdinal("Type")),
+                                    Name = reader.GetString(reader.GetOrdinal("Name")),
+                                    AttackSurface = reader.IsDBNull(reader.GetOrdinal("AttackSurface")) ? null : reader.GetString(reader.GetOrdinal("AttackSurface")),
+                                    State = reader.IsDBNull(reader.GetOrdinal("State")) ? null : reader.GetString(reader.GetOrdinal("State")),
+                                    Version = reader.IsDBNull(reader.GetOrdinal("Version")) ? null : (double?)reader.GetDecimal(reader.GetOrdinal("Version")),
+                                    Description = reader.IsDBNull(reader.GetOrdinal("Description")) ? null : reader.GetString(reader.GetOrdinal("Description")),
+                                    Price = reader.GetDecimal(reader.GetOrdinal("Price")),
+                                    SellerId = reader.GetInt32(reader.GetOrdinal("SellerId")),
+                                    SellerName = reader.IsDBNull(reader.GetOrdinal("SellerName")) ? null : reader.GetString(reader.GetOrdinal("SellerName"))
+                                };
 
-                            hardwareList.Add(hardware);
+                                hardware.EnsureNotNullValues();
+                                hardwareList.Add(hardware);
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"Error creating Hardware object: {ex.Message}");
+                                Console.WriteLine($"Problematic data - Type: {reader["Type"]}, HardwareId: {reader["HardwareId"]}");
+                            }
                         }
                     }
                 }
@@ -96,7 +111,6 @@ public class DbService
         }
         catch (Exception ex)
         {
-            // Handle the exception, e.g., log it or display an error message
             Console.WriteLine($"Error retrieving hardware: {ex.Message}");
         }
 

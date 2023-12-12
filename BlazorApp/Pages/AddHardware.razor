@@ -1,6 +1,6 @@
 ﻿<!-- AddHardware.razor -->
-@using BlazorApp.Data
 @page "/addhardware"
+@using BlazorApp.Data
 
 <style>
     h3 {
@@ -34,12 +34,12 @@
         cursor: pointer;
     }
 
-        button:hover {
-            background-color: #45a049;
-        }
+    button:hover {
+        background-color: #45a049;
+    }
 </style>
 
-<h3>Added a new product</h3>
+<h3>Tilføj et nyt hardwareprodukt</h3>
 
 <EditForm Model="@newHardware" OnValidSubmit="@AddHardwareHandler">
     <div>
@@ -87,7 +87,7 @@
         <InputText @bind-Value="newHardware.SellerName" />
     </div>
 
-    <button type="submit">Save Product</button>
+    <button type="submit">Gem hardware</button>
 </EditForm>
 
 @code {
@@ -96,19 +96,34 @@
 
     protected override void OnInitialized()
     {
-        // Konfigurer din databaseforbindelsesstreng
+        // Configure your database connection string
         string connectionString = "Server=(localdb)\\Local;Database=master;Integrated Security=True;";
         dbService = new DbService(connectionString);
     }
 
     private async Task AddHardwareHandler()
     {
-        newHardware.EnsureNotNullValues(); 
+        try
+        {
+            newHardware.EnsureNotNullValues(); // Sørg for, at nullable egenskaber har en værdi
 
-        await dbService.AddHardwareAsync(newHardware);
+            await dbService.AddHardwareAsync(newHardware);
 
-        
-        newHardware = new Hardware();
-        // NavigationManager.NavigateTo("/otherpage");
+            // Nulstil inputfelterne
+            newHardware = new Hardware();
+
+            // Eventuel navigation til en anden side
+            // NavigationManager.NavigateTo("/otherpage");
+        }
+        catch (Exception ex)
+        {
+            // Udskriv fejldetaljer i konsollen
+            Console.WriteLine($"Error adding hardware: {ex.Message}");
+            if (ex.InnerException != null)
+            {
+                Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");
+            }
+        }
     }
 }
+

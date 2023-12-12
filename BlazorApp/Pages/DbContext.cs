@@ -34,11 +34,16 @@ public class DatabaseManager
             ("@Name", seller.Name), ("@Email", seller.Email));
     }
 
+
     public void AddHardware(Hardware hardware)
     {
-        ExecuteNonQuery("INSERT INTO Hardware (Name, Price, SellerId) VALUES (@Name, @Price, @SellerId)",
-            ("@Name", hardware.Name), ("@Price", hardware.Price), ("@SellerId", hardware.SellerId));
+        ExecuteNonQuery("INSERT INTO Hardware (Type, Name, AttackSurface, State, Version, Description, Price, SellerId, SellerName) VALUES (@Type, @Name, @AttackSurface, @State, @Version, @Description, @Price, @SellerId, @SellerName)",
+            ("@Type", hardware.Type), ("@Name", hardware.Name), ("@AttackSurface", hardware.AttackSurface),
+            ("@State", hardware.State), ("@Version", hardware.Version), ("@Description", hardware.Description),
+            ("@Price", hardware.Price), ("@SellerId", hardware.SellerId), ("@SellerName", hardware.SellerName));
     }
+
+
 
     public void RemoveSeller(int sellerId)
     {
