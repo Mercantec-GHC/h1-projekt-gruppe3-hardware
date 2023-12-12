@@ -103,14 +103,12 @@
 
     private async Task AddHardwareHandler()
     {
-        newHardware.EnsureNotNullValues(); // Sørg for, at nullable egenskaber har en værdi
+        newHardware.EnsureNotNullValues(); 
 
         await dbService.AddHardwareAsync(newHardware);
 
-        // Nulstil inputfelterne
+        
         newHardware = new Hardware();
-
-        // Eventuel navigation til en anden side
         // NavigationManager.NavigateTo("/otherpage");
     }
 }
