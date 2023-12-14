@@ -37,9 +37,9 @@ public class DatabaseManager
 
     public void AddHardware(Hardware hardware)
     {
-        ExecuteNonQuery("INSERT INTO Hardware (Type, Name, AttackSurface, State, Version, Description, Price, SellerId, SellerName) VALUES (@Type, @Name, @AttackSurface, @State, @Version, @Description, @Price, @SellerId, @SellerName)",
-            ("@Type", hardware.Type), ("@Name", hardware.Name), ("@AttackSurface", hardware.AttackSurface),
-            ("@State", hardware.State), ("@Version", hardware.Version), ("@Description", hardware.Description),
+        ExecuteNonQuery("INSERT INTO Hardware (Name, Condition, Description, Price, SellerId, SellerName) VALUES (@Name, @Condition, @Description, @Price, @SellerId, @SellerName)",
+           ("@Name", hardware.Name), 
+            ("@State", hardware.Condition), ("@Description", hardware.Description),
             ("@Price", hardware.Price), ("@SellerId", hardware.SellerId), ("@SellerName", hardware.SellerName));
     }
 

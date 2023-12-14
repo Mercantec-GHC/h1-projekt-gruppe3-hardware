@@ -43,29 +43,16 @@
 
 <EditForm Model="@newHardware" OnValidSubmit="@AddHardwareHandler">
     <div>
-        <label>Type:</label>
-        <InputText @bind-Value="newHardware.Type" />
-    </div>
-
-    <div>
         <label>Name:</label>
         <InputText @bind-Value="newHardware.Name" />
     </div>
 
-    <div>
-        <label>Attack Surface:</label>
-        <InputText @bind-Value="newHardware.AttackSurface" />
-    </div>
 
     <div>
-        <label>State:</label>
-        <InputText @bind-Value="newHardware.State" />
+        <label>Condition:</label>
+        <InputText @bind-Value="newHardware.Condition" />
     </div>
 
-    <div>
-        <label>Version:</label>
-        <InputNumber @bind-Value="newHardware.Version" />
-    </div>
 
     <div>
         <label>Description:</label>

@@ -54,11 +54,8 @@
         <table>
             <thead>
                 <tr>
-                    <th>Type</th>
                     <th>Name</th>
-                    <th>Attack Surface</th>
-                    <th>State</th>
-                    <th>Version</th>
+                    <th>Condition</th>
                     <th>Description</th>
                     <th>Price</th>
                     <th>Seller Id</th>
@@ -69,11 +66,8 @@
                 @foreach (var hardware in hardwareList)
                 {
                     <tr>
-                        <td>@hardware.Type</td>
                         <td>@hardware.Name</td>
-                        <td>@hardware.AttackSurface</td>
-                        <td>@hardware.State</td>
-                        <td>@hardware.Version</td>
+                        <td>@hardware.Condition</td>
                         <td>@hardware.Description</td>
                         <td>@hardware.Price</td>
                         <td>@hardware.SellerId</td>

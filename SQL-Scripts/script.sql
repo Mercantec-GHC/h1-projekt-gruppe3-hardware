@@ -7,11 +7,8 @@ CREATE TABLE Seller (
 
 CREATE TABLE Hardware (
     HardwareId INT PRIMARY KEY IDENTITY(1,1),
-    Type NVARCHAR(50) NOT NULL,
     Name NVARCHAR(100) NOT NULL,
-    AttackSurface NVARCHAR(100),
-    State NVARCHAR(50),
-    Version DECIMAL(18,2),
+    Condition NVARCHAR(50),
     Description NVARCHAR(MAX),
     Price DECIMAL(18,2) NOT NULL,
     SellerId INT,

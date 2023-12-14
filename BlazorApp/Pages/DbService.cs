@@ -36,17 +36,13 @@ public class DbService
 
 
 
-                    cmd.Parameters.AddWithValue("@Type", (object)hardware.Type ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@Name", (object)hardware.Name ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@AttackSurface", (object)hardware.AttackSurface ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@State", (object)hardware.State ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Version", hardware.Version);
+                    cmd.Parameters.AddWithValue("@Condition", (object)hardware.Condition ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@Description", (object)hardware.Description ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@Price", hardware.Price);
                     cmd.Parameters.AddWithValue("@SellerId", hardware.SellerId);
                     cmd.Parameters.AddWithValue("@SellerName", (object)hardware.SellerName ?? DBNull.Value);
 
-                    Console.WriteLine(hardware.Version);
 
 
                     await cmd.ExecuteNonQueryAsync();
@@ -85,11 +81,8 @@ public class DbService
                                 Hardware hardware = new Hardware
                                 {
                                     HardwareId = reader.GetInt32(reader.GetOrdinal("HardwareId")),
-                                    Type = reader["Type"] == DBNull.Value ? null : reader.GetString(reader.GetOrdinal("Type")),
                                     Name = reader.GetString(reader.GetOrdinal("Name")),
-                                    AttackSurface = reader.IsDBNull(reader.GetOrdinal("AttackSurface")) ? null : reader.GetString(reader.GetOrdinal("AttackSurface")),
-                                    State = reader.IsDBNull(reader.GetOrdinal("State")) ? null : reader.GetString(reader.GetOrdinal("State")),
-                                    Version = reader.IsDBNull(reader.GetOrdinal("Version")) ? null : (double?)reader.GetDecimal(reader.GetOrdinal("Version")),
+                                    Condition = reader.IsDBNull(reader.GetOrdinal("Condition")) ? null : reader.GetString(reader.GetOrdinal("Condition")),
                                     Description = reader.IsDBNull(reader.GetOrdinal("Description")) ? null : reader.GetString(reader.GetOrdinal("Description")),
                                     Price = reader.GetDecimal(reader.GetOrdinal("Price")),
                                     SellerId = reader.GetInt32(reader.GetOrdinal("SellerId")),

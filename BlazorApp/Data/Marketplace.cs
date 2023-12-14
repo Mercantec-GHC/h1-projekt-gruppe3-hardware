@@ -82,7 +82,6 @@
                 Trusted = 0,
                 Product = new Hardware
                 {
-                    Type = "Hardware", // Sat til kun hardware, for at gøre det nemmere. Kan ændres senere, hvis software også skal tilføjes
                     Name = productName,
                     Price = price
                 }

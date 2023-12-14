@@ -15,11 +15,8 @@ namespace ClassLibrary1
                 Trusted = 1,
                 Product = new Hardware
                 {
-                    Type = "Hardware",
                     Name = "Gigabyte GeForce RTX 4090 GAMING OC 24G Grafikkort - 24GB GDDR6X - NVIDIA RTX 4090 - PCI Express 4.0 x16",
-                    AttackSurface = "None",
-                    State = "New",
-                    Version = 1.0,
+                    Condition = "New",
                     Description = "New 4090 graphicscard. Not used, and works really well",
                     Price = 17999.95m
                 }
@@ -33,11 +30,8 @@ namespace ClassLibrary1
                 Trusted = 0,
                 Product = new Hardware
                 {
-                    Type = "Hardware",
                     Name = "Cool Hardware",
-                    AttackSurface = "Peripheral",
-                    State = "Used",
-                    Version = 3.0,
+                    Condition = "Used",
                     Description = "A cool hardware product",
                     Price = 149.99m
                 }
