@@ -3,28 +3,28 @@
 
 @page "/tilfojprodukt"
 
-<h3>Tilføj Hardware Produkt</h3>
+<h3>Add Hardware Produkt</h3>
 
 @if (gemt)
 {
-    <p>Produktet er blevet gemt!</p>
+    <p>The Product is saved!</p>
 }
 else
 {
     <form @onsubmit="GemProdukt">
 
-        <label>Produkt Navn:</label>
+        <label>Product Name:</label>
         <input @bind="nytProdukt.Name" />
 
-        <label>Beskrivelse:</label>
+        <label>Description:</label>
         <textarea @bind="nytProdukt.Description"></textarea>
 
-        <label>Pris:</label>
+        <label>Price:</label>
         <input type="number" @bind="nytProdukt.Price" />
 
         <!-- Tilføj flere input-felter efter behov -->
 
-        <button type="submit">Gem Produkt</button>
+        <button type="submit">Save Product</button>
     </form>
 }
 

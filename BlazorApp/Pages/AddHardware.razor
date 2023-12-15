@@ -39,7 +39,7 @@
         }
 </style>
 
-<h3>Tilføj et nyt hardwareprodukt</h3>
+<h3>Add new hardwareproduct</h3>
 
 <EditForm Model="@newHardware" OnValidSubmit="@AddHardwareHandler">
     <div>
@@ -65,8 +65,8 @@
     <div>
         <label>Category:</label>
         <select @bind="newHardware.Category">
-            <option value="Grafikkort">Grafikkort</option>
-            <option value="Radio-Frekvenser">Radio-Frekvenser</option>
+            <option value="Graphics-card">Graphics-card</option>
+            <option value="Radio-Frequencies">Radio-Frequencies</option>
             <option value="KeyLocker">KeyLocker</option>
         </select>
     </div>
@@ -76,7 +76,7 @@
         <span>5004</span>
     </div>
 
-    <button type="submit">Gem hardware</button>
+    <button type="submit">Save hardware</button>
 </EditForm>
 
 @code {
