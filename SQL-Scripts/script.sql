@@ -12,6 +12,6 @@ CREATE TABLE Hardware (
     Description NVARCHAR(MAX),
     Price DECIMAL(18,2) NOT NULL,
     SellerId INT,
-    SellerName NVARCHAR(MAX),
+    Category NVARCHAR(50) NOT NULL, -- Added Category column
     FOREIGN KEY (SellerId) REFERENCES Seller(SellerId)
 );

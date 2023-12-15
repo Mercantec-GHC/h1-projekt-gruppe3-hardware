@@ -34,25 +34,23 @@
         cursor: pointer;
     }
 
-    button:hover {
-        background-color: #45a049;
-    }
+        button:hover {
+            background-color: #45a049;
+        }
 </style>
 
 <h3>Tilføj et nyt hardwareprodukt</h3>
 
 <EditForm Model="@newHardware" OnValidSubmit="@AddHardwareHandler">
     <div>
-        <label>Name:</label>
+        <label>Product-Name:</label>
         <InputText @bind-Value="newHardware.Name" />
     </div>
-
 
     <div>
         <label>Condition:</label>
         <InputText @bind-Value="newHardware.Condition" />
     </div>
-
 
     <div>
         <label>Description:</label>
@@ -65,13 +63,17 @@
     </div>
 
     <div>
-        <label>Seller Id:</label>
-        <InputNumber @bind-Value="newHardware.SellerId" />
+        <label>Category:</label>
+        <select @bind="newHardware.Category">
+            <option value="Grafikkort">Grafikkort</option>
+            <option value="Radio-Frekvenser">Radio-Frekvenser</option>
+            <option value="KeyLocker">KeyLocker</option>
+        </select>
     </div>
 
     <div>
-        <label>Seller Name:</label>
-        <InputText @bind-Value="newHardware.SellerName" />
+        <label>Seller Id:</label>
+        <span>5004</span>
     </div>
 
     <button type="submit">Gem hardware</button>
@@ -92,7 +94,10 @@
     {
         try
         {
-            newHardware.EnsureNotNullValues(); // Sørg for, at nullable egenskaber har en værdi
+            // Hardcode SellerId to 5004
+            newHardware.SellerId = 5004;
+
+            newHardware.EnsureNotNullValues();
 
             await dbService.AddHardwareAsync(newHardware);
 
@@ -113,4 +118,3 @@
         }
     }
 }
-

@@ -1,4 +1,5 @@
-﻿@page "/userproduct"
+﻿<!-- userproduct.razor -->
+@page "/userproduct"
 @using BlazorApp.Data
 
 <div class="container">
@@ -50,6 +51,7 @@
                         <th>Navn</th>
                         <th>Pris</th>
                         <th>Sælger ID</th>
+                        <th>Kategori</th>
                         <th>Handlinger</th>
                     </tr>
                 </thead>
@@ -61,6 +63,7 @@
                             <td>@hardware.Name</td>
                             <td>@hardware.Price.ToString("C")</td>
                             <td>@hardware.SellerId</td>
+                            <td>@hardware.Category</td>
                             <td>
                                 <button class="btn btn-danger" @onclick="() => RemoveHardware(hardware)">Fjern</button>
                             </td>
@@ -80,6 +83,9 @@
                 <label for="newHardwareSellerId">Sælger ID:</label>
                 <input class="form-control" id="newHardwareSellerId" @bind="newHardwareSellerId" />
 
+                <label for="newHardwareCategory">Kategori:</label>
+                <input class="form-control" id="newHardwareCategory" @bind="newHardwareCategory" />
+
                 <button class="btn btn-success mt-2" @onclick="AddHardware">Tilføj Produkt</button>
             </div>
         </div>
@@ -94,10 +100,10 @@
     string newHardwareName = "";
     decimal newHardwarePrice = 0;
     int newHardwareSellerId = 0;
+    string newHardwareCategory = ""; // Added this line
 
     DatabaseManager dbManager;
 
-    // Metode kaldet ved siden initialisering.
     protected override void OnInitialized()
     {
         dbManager = new DatabaseManager();
@@ -105,7 +111,6 @@
         hardwareList = dbManager.GetHardware() ?? new List<Hardware>();
     }
 
-    // Fjerner en bruger fra listen og opdaterer brugerlisten.
     void RemoveUser(Seller user)
     {
         if (user != null)
@@ -115,7 +120,6 @@
         }
     }
 
-    // Fjerner et produkt fra listen og opdaterer produktlisten.
     void RemoveHardware(Hardware hardware)
     {
         if (hardware != null)
@@ -125,7 +129,6 @@
         }
     }
 
-    // Tilføjer en ny bruger og opdaterer brugerlisten.
     void AddUser()
     {
         Seller newUser = new Seller
@@ -137,27 +140,26 @@
         dbManager.AddSeller(newUser);
         users = dbManager.GetSellers();
 
-        // Rydder inputfelterne.
         newUserName = "";
         newUserEmail = "";
     }
 
-    // Tilføjer et nyt produkt og opdaterer produktlisten.
     void AddHardware()
     {
         Hardware newHardware = new Hardware
             {
                 Name = newHardwareName,
                 Price = newHardwarePrice,
-                SellerId = newHardwareSellerId
+                SellerId = newHardwareSellerId,
+                Category = newHardwareCategory
             };
 
         dbManager.AddHardware(newHardware);
         hardwareList = dbManager.GetHardware();
 
-        // Rydder inputfelterne.
         newHardwareName = "";
         newHardwarePrice = 0;
         newHardwareSellerId = 0;
+        newHardwareCategory = "";
     }
 }

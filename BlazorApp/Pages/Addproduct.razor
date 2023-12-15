@@ -12,8 +12,6 @@
 else
 {
     <form @onsubmit="GemProdukt">
-        <label>Sælger Navn:</label>
-        <input @bind="nytProdukt.SellerName" />
 
         <label>Produkt Navn:</label>
         <input @bind="nytProdukt.Name" />
@@ -64,7 +62,7 @@ else
 
             });
 
-        // Marker at produktet er blevet gemt
+        
         gemt = true;
     }
 
