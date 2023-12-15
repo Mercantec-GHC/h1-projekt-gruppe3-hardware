@@ -67,7 +67,7 @@
         <select @bind="newHardware.Category">
             <option value="Graphics-card">Graphics-card</option>
             <option value="Radio-Frequencies">Radio-Frequencies</option>
-            <option value="KeyLocker">KeyLocker</option>
+            <option value="Plug-in">Plug-in</option>
         </select>
     </div>
 
@@ -85,7 +85,7 @@
 
     protected override void OnInitialized()
     {
-        // Configure your database connection string
+        
         string connectionString = "Server=(localdb)\\Local;Database=master;Integrated Security=True;";
         dbService = new DbService(connectionString);
     }
@@ -94,7 +94,7 @@
     {
         try
         {
-            // Hardcode SellerId to 5004
+            
             newHardware.SellerId = 5004;
 
             newHardware.EnsureNotNullValues();
