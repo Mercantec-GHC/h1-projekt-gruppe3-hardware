@@ -1,20 +1,23 @@
-﻿namespace BlazorApp.Data
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace BlazorApp.Data
 {
     public class Marketplace
     {
         public List<Seller> sellers = new List<Seller>();
-        private List<ShoppingCartItem> shoppingCart = new List<ShoppingCartItem>();
 
         public Seller potentialSeller = new Seller();
 
-        //Tilføj en sælger, så personen kan sælge produkter 
+        // Tilføj en sælger, så personen kan sælge produkter 
         public void AddSeller(Seller seller)
         {
             sellers.Add(seller);
         }
 
-		//Viser alle sælgere 
-		public void DisplayAllSellers()
+        // Viser alle sælgere 
+        public void DisplayAllSellers()
         {
             foreach (var seller in sellers)
             {
@@ -25,11 +28,10 @@
             }
         }
 
-        //Viser alle trusted sælgere. (Sælgere med bedste rating)
+        // Viser alle trusted sælgere. (Sælgere med bedste rating)
         public void DisplayTrustedSellers()
         {
             var trustedSellers = sellers.Where(seller => seller.Trusted == 1);
-
 
             Console.WriteLine("Trusted Sellers:");
             foreach (var seller in trustedSellers)
@@ -41,7 +43,7 @@
             }
         }
 
-        //Viser sælgere og deres produkter i forhold til deres pris 
+        // Viser sælgere og deres produkter i forhold til deres pris 
         public void DisplaySellersByPrice()
         {
             var sellersByPrice = sellers.OrderBy(seller => seller.Product.Price);
@@ -56,7 +58,7 @@
             }
         }
 
-        //Giver brugeren mulighed for at søge efter produkter. 
+        // Giver brugeren mulighed for at søge efter produkter. 
         public void SearchProduct(string productName)
         {
             var matchingSellers = sellers.Where(seller => seller.Product.Name?.Contains(productName, StringComparison.OrdinalIgnoreCase) == true);
@@ -71,13 +73,11 @@
             }
         }
 
-        //Mulighed for at tilføje et produkt/annonce 
-        public void CreateAd(string sellerName, string phoneNumber, string email, string productName, decimal price)
+        // Mulighed for at tilføje et produkt/annonce 
+        public void CreateAd(string email, string productName, decimal price)
         {
             Seller newSeller = new Seller
             {
-                Name = sellerName,
-                PhoneNumber = phoneNumber,
                 Email = email,
                 Trusted = 0,
                 Product = new Hardware
@@ -87,35 +87,9 @@
                 }
             };
 
-            //Giver en besked om at annoncen er oprettet med produktnavn og sælgerens navn
             sellers.Add(newSeller);
-            Console.WriteLine($"Ad created for '{productName}' by '{sellerName}'.");
-        }
-
-        //Tilføj til kurven 
-        public void AddToCart(Seller seller)
-        {
-            shoppingCart.Add(new ShoppingCartItem
-            {
-                Seller = seller,
-                Product = seller.Product
-            });
-
-            Console.WriteLine($"Product '{seller.Product.Name}' added to the shopping cart.");
-        }
-
-        //Vis kurven (For at vise hvad du har planer om at købe)
-        public void DisplayShoppingCart()
-        {
-            Console.WriteLine("Shopping Cart:");
-
-            foreach (var item in shoppingCart)
-            {
-                Console.WriteLine($"Seller: {item.Seller.Name}");
-                Console.WriteLine($"Product: {item.Product.Name}");
-                Console.WriteLine($"Price: {item.Product.Price:C}");
-                Console.WriteLine("--------");
-            }
         }
     }
+
+    // Define your Seller and Hardware classes here (assuming they are not provided in this snippet).
 }

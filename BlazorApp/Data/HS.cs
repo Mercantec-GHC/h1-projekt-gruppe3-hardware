@@ -16,7 +16,6 @@ namespace ClassLibrary1
                 Product = new Hardware
                 {
                     Name = "Gigabyte GeForce RTX 4090 GAMING OC 24G Grafikkort - 24GB GDDR6X - NVIDIA RTX 4090 - PCI Express 4.0 x16",
-                    Condition = "New",
                     Description = "New 4090 graphicscard. Not used, and works really well",
                     Price = 17999.95m
                 }
@@ -31,7 +30,6 @@ namespace ClassLibrary1
                 Product = new Hardware
                 {
                     Name = "Cool Hardware",
-                    Condition = "Used",
                     Description = "A cool hardware product",
                     Price = 149.99m
                 }
@@ -50,21 +48,6 @@ namespace ClassLibrary1
 
             // Vis sælgere sorteret efter pris
             marketplace.DisplaySellersByPrice();
-
-            // Søg efter et produkt
-            marketplace.SearchProduct("Spy ETH");
-
-            // Opret en annonce
-            marketplace.CreateAd("John Doe", "+45 12345678", "john.doe@example.com", "Gaming Mouse", 29.99m);
-
-            // Vis alle sælgere igen, inklusive den nye annonce
-            marketplace.DisplayAllSellers();
-
-            // Tilføj et produkt til indkøbskurven
-            marketplace.AddToCart(seller1);
-
-            // Vis indkøbskurven
-            marketplace.DisplayShoppingCart();
         }
     }
 }

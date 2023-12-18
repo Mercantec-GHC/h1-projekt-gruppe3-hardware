@@ -51,7 +51,6 @@
                         <th>Navn</th>
                         <th>Pris</th>
                         <th>Sælger ID</th>
-                        <th>Kategori</th>
                         <th>Handlinger</th>
                     </tr>
                 </thead>
@@ -63,7 +62,6 @@
                             <td>@hardware.Name</td>
                             <td>@hardware.Price.ToString("C")</td>
                             <td>@hardware.SellerId</td>
-                            <td>@hardware.Category</td>
                             <td>
                                 <button class="btn btn-danger" @onclick="() => RemoveHardware(hardware)">Fjern</button>
                             </td>
@@ -83,9 +81,6 @@
                 <label for="newHardwareSellerId">Sælger ID:</label>
                 <input class="form-control" id="newHardwareSellerId" @bind="newHardwareSellerId" />
 
-                <label for="newHardwareCategory">Kategori:</label>
-                <input class="form-control" id="newHardwareCategory" @bind="newHardwareCategory" />
-
                 <button class="btn btn-success mt-2" @onclick="AddHardware">Tilføj Produkt</button>
             </div>
         </div>
@@ -100,7 +95,6 @@
     string newHardwareName = "";
     decimal newHardwarePrice = 0;
     int newHardwareSellerId = 0;
-    string newHardwareCategory = ""; // Added this line
 
     DatabaseManager dbManager;
 
@@ -151,7 +145,7 @@
                 Name = newHardwareName,
                 Price = newHardwarePrice,
                 SellerId = newHardwareSellerId,
-                Category = newHardwareCategory
+                Description = string.Empty,
             };
 
         dbManager.AddHardware(newHardware);
@@ -160,6 +154,5 @@
         newHardwareName = "";
         newHardwarePrice = 0;
         newHardwareSellerId = 0;
-        newHardwareCategory = "";
     }
 }

@@ -34,16 +34,14 @@ public class DatabaseManager
             ("@Name", seller.Name), ("@Email", seller.Email));
     }
 
-
     public void AddHardware(Hardware hardware)
     {
-        ExecuteNonQuery("INSERT INTO Hardware (Name, Condition, Description, Price, SellerId, SellerName) VALUES (@Name, @Condition, @Description, @Price, @SellerId, @SellerName)",
-           ("@Name", hardware.Name), 
-            ("@State", hardware.Condition), ("@Description", hardware.Description),
-            ("@Price", hardware.Price), ("@SellerId", hardware.SellerId), ("@SellerName", hardware.SellerName));
+        ExecuteNonQuery("INSERT INTO Hardware (Name, Description, Price, SellerId) VALUES (@Name, @Description, @Price, @SellerId)",
+           ("@Name", hardware.Name),
+           ("@Description", (object)hardware.Description ?? DBNull.Value),
+           ("@Price", hardware.Price),
+           ("@SellerId", hardware.SellerId));
     }
-
-
 
     public void RemoveSeller(int sellerId)
     {
@@ -65,7 +63,7 @@ public class DatabaseManager
 
             using (SqlCommand command = new SqlCommand(query, connection))
             {
-                // Angiv kommandotypen som tekstkommando (Optional)
+                // Set command type as text (Optional)
                 command.CommandType = CommandType.Text;
 
                 foreach (var (paramName, paramValue) in parameters)
@@ -73,60 +71,63 @@ public class DatabaseManager
                     command.Parameters.AddWithValue(paramName, paramValue ?? DBNull.Value);
                 }
 
-                using (SqlDataReader reader = command.ExecuteReader())
+                try
                 {
-                    while (reader.Read())
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        T entity = Activator.CreateInstance<T>();
-
-                        foreach (var property in typeof(T).GetProperties())
+                        while (reader.Read())
                         {
-                            string columnName = property.Name;
+                            T entity = Activator.CreateInstance<T>();
 
-                            try
+                            foreach (var property in typeof(T).GetProperties())
                             {
-                                if (property.PropertyType == typeof(int))
+                                string columnName = property.Name;
+
+                                try
                                 {
-                                    if (!reader.IsDBNull(reader.GetOrdinal(columnName)))
+                                    int columnIndex = reader.GetOrdinal(columnName);
+
+                                    if (!reader.IsDBNull(columnIndex))
                                     {
-                                        property.SetValue(entity, Convert.ToInt32(reader[columnName]));
+                                        if (property.PropertyType == typeof(int))
+                                        {
+                                            property.SetValue(entity, Convert.ToInt32(reader[columnIndex]));
+                                        }
+                                        else if (property.PropertyType == typeof(decimal))
+                                        {
+                                            property.SetValue(entity, Convert.ToDecimal(reader[columnIndex]));
+                                        }
+                                        else if (property.PropertyType == typeof(byte))
+                                        {
+                                            property.SetValue(entity, Convert.ToByte(reader[columnIndex]));
+                                        }
+                                        else
+                                        {
+                                            property.SetValue(entity, reader[columnIndex]?.ToString());
+                                        }
                                     }
                                 }
-                                else if (property.PropertyType == typeof(decimal))
+                                catch (Exception ex)
                                 {
-                                    if (!reader.IsDBNull(reader.GetOrdinal(columnName)))
-                                    {
-                                        property.SetValue(entity, Convert.ToDecimal(reader[columnName]));
-                                    }
-                                }
-                                else if (property.PropertyType == typeof(byte))
-                                {
-                                    if (!reader.IsDBNull(reader.GetOrdinal(columnName)))
-                                    {
-                                        property.SetValue(entity, Convert.ToByte(reader[columnName]));
-                                    }
-                                }
-                                else
-                                {
-                                    property.SetValue(entity, reader[columnName]?.ToString());
+                                    // Log or print error details for troubleshooting
+                                    Console.WriteLine($"Error setting property {property.Name} from column {columnName}: {ex.Message}");
                                 }
                             }
-                            catch (IndexOutOfRangeException ex)
-                            {
-                                // Log eller udskriv fejldetaljer for fejlfinding
-                                Console.WriteLine($"Fejl ved indstilling af egenskab {property.Name} fra kolonne {columnName}: {ex.Message}");
-                            }
+
+                            entities.Add(entity);
                         }
-
-                        entities.Add(entity);
                     }
+                }
+                catch (Exception ex)
+                {
+                    // Log or print error details for troubleshooting
+                    Console.WriteLine($"Error executing reader: {ex.Message}");
                 }
             }
         }
 
         return entities;
     }
-
 
     private void ExecuteNonQuery(string query, params (string, object)[] parameters)
     {
@@ -141,7 +142,15 @@ public class DatabaseManager
                     command.Parameters.AddWithValue(paramName, paramValue ?? DBNull.Value);
                 }
 
-                command.ExecuteNonQuery();
+                try
+                {
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    // Log or print error details for troubleshooting
+                    Console.WriteLine($"Error executing non-query: {ex.Message}");
+                }
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿<!-- AddHardware.razor -->
 @page "/addhardware"
 @using BlazorApp.Data
+@using System.Data.SqlClient
 
 <style>
     h3 {
@@ -39,17 +40,12 @@
         }
 </style>
 
-<h3>Add new hardwareproduct</h3>
+<h3>Add new hardware product</h3>
 
 <EditForm Model="@newHardware" OnValidSubmit="@AddHardwareHandler">
     <div>
         <label>Product-Name:</label>
         <InputText @bind-Value="newHardware.Name" />
-    </div>
-
-    <div>
-        <label>Condition:</label>
-        <InputText @bind-Value="newHardware.Condition" />
     </div>
 
     <div>
@@ -60,15 +56,6 @@
     <div>
         <label>Price:</label>
         <InputNumber @bind-Value="newHardware.Price" />
-    </div>
-
-    <div>
-        <label>Category:</label>
-        <select @bind="newHardware.Category">
-            <option value="Graphics-card">Graphics-card</option>
-            <option value="Radio-Frequencies">Radio-Frequencies</option>
-            <option value="Plug-in">Plug-in</option>
-        </select>
     </div>
 
     <div>
@@ -85,7 +72,6 @@
 
     protected override void OnInitialized()
     {
-        
         string connectionString = "Server=(localdb)\\Local;Database=master;Integrated Security=True;";
         dbService = new DbService(connectionString);
     }
@@ -94,27 +80,36 @@
     {
         try
         {
-            
             newHardware.SellerId = 5004;
-
             newHardware.EnsureNotNullValues();
 
             await dbService.AddHardwareAsync(newHardware);
 
-            // Nulstil inputfelterne
+            // Reset input fields
             newHardware = new Hardware();
-
-            // Eventuel navigation til en anden side
-            // NavigationManager.NavigateTo("/otherpage");
         }
         catch (Exception ex)
         {
-            // Udskriv fejldetaljer i konsollen
+            // Print error details to the console
             Console.WriteLine($"Error adding hardware: {ex.Message}");
+
+            // Additional error details
             if (ex.InnerException != null)
             {
                 Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");
             }
+
+            // Check for specific SQL-related exception
+            if (ex is SqlException sqlException)
+            {
+                for (int i = 0; i < sqlException.Errors.Count; i++)
+                {
+                    Console.WriteLine($"SqlError {i}: {sqlException.Errors[i].Message}");
+                }
+            }
+
+            // Print stack trace
+            Console.WriteLine($"Stack Trace: {ex.StackTrace}");
         }
     }
 }

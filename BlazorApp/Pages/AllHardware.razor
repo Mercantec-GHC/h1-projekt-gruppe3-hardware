@@ -6,11 +6,12 @@
         margin: 0;
         padding: 0;
         font-family: 'Arial', sans-serif;
-        background: linear-gradient(45deg, #f06, #9f6);
+        background: linear-gradient(45deg, #052767, #3a0647);
         height: 100vh;
         display: flex;
-        justify-content: center;
+        flex-direction: column;
         align-items: center;
+        justify-content: center;
     }
 
     .hardware-list {
@@ -18,7 +19,7 @@
         padding: 20px;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        width: 800px;
+        width: 100%;
         text-align: center;
         margin-top: 20px;
     }
@@ -55,8 +56,6 @@
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Condition</th>
-                    <th>Description</th>
                     <th>Price</th>
                     <th>Seller Id</th>
                     <th>Seller Name</th>
@@ -67,11 +66,8 @@
                 {
                     <tr>
                         <td>@hardware.Name</td>
-                        <td>@hardware.Condition</td>
-                        <td>@hardware.Description</td>
                         <td>@hardware.Price</td>
                         <td>@hardware.SellerId</td>
-                        <td>@hardware.SellerName</td>
                     </tr>
                 }
             </tbody>
@@ -89,7 +85,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        string connectionString = "Server=(localdb)\\Local;Database=Master;Integrated Security=True;";
+        string connectionString = "Server=(localdb)\\Local;Database=master;Integrated Security=True;";
         dbService = new DbService(connectionString);
 
         // Load hardware data from the database
@@ -104,7 +100,7 @@
         }
         catch (Exception ex)
         {
-            // Handle the exception, e.g., log it or display an error message
+            // Error Message
             Console.WriteLine($"Error loading hardware list: {ex.Message}");
         }
     }

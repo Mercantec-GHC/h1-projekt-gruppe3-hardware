@@ -32,18 +32,12 @@ public class DbService
                 {
                     cmd.Connection = connection;
                     cmd.CommandType = CommandType.Text;
-                    cmd.CommandText = "INSERT INTO Hardware (Name, Price, SellerId) VALUES (@Name, @Price, @SellerId)";
-
-
+                    cmd.CommandText = "INSERT INTO Hardware (Name, Description, Price, SellerId) VALUES (@Name, @Description, @Price, @SellerId)";
 
                     cmd.Parameters.AddWithValue("@Name", (object)hardware.Name ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Condition", (object)hardware.Condition ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@Description", (object)hardware.Description ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@Price", hardware.Price);
                     cmd.Parameters.AddWithValue("@SellerId", hardware.SellerId);
-                    cmd.Parameters.AddWithValue("@SellerName", (object)hardware.SellerName ?? DBNull.Value);
-
-
 
                     await cmd.ExecuteNonQueryAsync();
                 }
@@ -82,11 +76,9 @@ public class DbService
                                 {
                                     HardwareId = reader.GetInt32(reader.GetOrdinal("HardwareId")),
                                     Name = reader.GetString(reader.GetOrdinal("Name")),
-                                    Condition = reader.IsDBNull(reader.GetOrdinal("Condition")) ? null : reader.GetString(reader.GetOrdinal("Condition")),
                                     Description = reader.IsDBNull(reader.GetOrdinal("Description")) ? null : reader.GetString(reader.GetOrdinal("Description")),
                                     Price = reader.GetDecimal(reader.GetOrdinal("Price")),
-                                    SellerId = reader.GetInt32(reader.GetOrdinal("SellerId")),
-                                    SellerName = reader.IsDBNull(reader.GetOrdinal("SellerName")) ? null : reader.GetString(reader.GetOrdinal("SellerName"))
+                                    SellerId = reader.GetInt32(reader.GetOrdinal("SellerId"))
                                 };
 
                                 hardware.EnsureNotNullValues();
@@ -95,7 +87,7 @@ public class DbService
                             catch (Exception ex)
                             {
                                 Console.WriteLine($"Error creating Hardware object: {ex.Message}");
-                                Console.WriteLine($"Problematic data - Type: {reader["Type"]}, HardwareId: {reader["HardwareId"]}");
+                                Console.WriteLine($"Problematic data - HardwareId: {reader["HardwareId"]}");
                             }
                         }
                     }
