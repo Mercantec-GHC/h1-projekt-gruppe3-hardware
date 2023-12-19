@@ -1,5 +1,4 @@
-﻿// DbService.cs
-using BlazorApp.Data;
+﻿using BlazorApp.Data;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -19,7 +18,7 @@ public class DbService
     {
         if (hardware == null)
         {
-            throw new ArgumentNullException(nameof(hardware), "Hardware object cannot be null.");
+            throw new ArgumentNullException(nameof(hardware), "Hardware-objekt kan ikke være null.");
         }
 
         try
@@ -45,12 +44,11 @@ public class DbService
         }
         catch (Exception ex)
         {
-            // Handle the exception, e.g., log it or display an error message
-            Console.WriteLine($"Error adding hardware: {ex.Message}");
+            Console.WriteLine($"Fejl ved tilføjelse af hardware: {ex.Message}");
         }
     }
 
-    public async Task<List<Hardware>> GetAllHardwareAsync(decimal? minPrice = null, decimal? maxPrice = null)
+    public async Task<List<Hardware>> GetAllHardwareAsync(decimal? minPrice = null, decimal? maxPrice = null, string sortBy = null)
     {
         List<Hardware> hardwareList = new List<Hardware>();
 
@@ -65,8 +63,8 @@ public class DbService
                     cmd.Connection = connection;
                     cmd.CommandType = CommandType.Text;
 
-                    // Update the SQL query to include the price filter
                     string query = "SELECT * FROM Hardware WHERE 1=1";
+
                     if (minPrice.HasValue)
                     {
                         query += " AND Price >= @MinPrice";
@@ -78,7 +76,7 @@ public class DbService
                         cmd.Parameters.Add("@MaxPrice", SqlDbType.Decimal).Value = maxPrice.Value;
                     }
 
-                    cmd.CommandText = query;
+                    cmd.CommandText = query + GetOrderByClause(sortBy);
 
                     using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
                     {
@@ -100,10 +98,31 @@ public class DbService
         }
         catch (Exception ex)
         {
-            // Handle the exception, e.g., log it or display an error message
-            Console.WriteLine($"Error retrieving hardware: {ex.Message}");
+            Console.WriteLine($"Fejl ved hentning af hardware: {ex.Message}");
         }
 
         return hardwareList;
+    }
+
+    public async Task<List<Hardware>> FilterHardwareAsync(decimal? minPrice, decimal? maxPrice)
+    {
+        return await GetAllHardwareAsync(minPrice, maxPrice, sortBy: null);
+    }
+
+    private string GetOrderByClause(string sortBy)
+    {
+        if (!string.IsNullOrEmpty(sortBy))
+        {
+            switch (sortBy.ToLower())
+            {
+                case "price":
+                    return " ORDER BY Price";
+                case "name":
+                default:
+                    return " ORDER BY Name";
+            }
+        }
+
+        return string.Empty;
     }
 }

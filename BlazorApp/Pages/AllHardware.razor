@@ -1,5 +1,8 @@
 ﻿@page "/allhardware"
 @using BlazorApp.Data
+@using System;
+@using System.Collections.Generic;
+@using System.Threading.Tasks;
 
 <style>
     body {
@@ -11,12 +14,20 @@
         height: 100vh;
     }
 
+    .container {
+        display: flex;
+        flex: 1;
+    }
+
     .sidebar {
-        background: #fff;
+        background: #329fa6;
+        color: #fff;
         padding: 20px;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         max-width: 250px;
+        position: sticky;
+        top: 0;
     }
 
     .content {
@@ -32,7 +43,7 @@
     h3 {
         font-size: 24px;
         margin-bottom: 20px;
-        color: #333;
+        color: #052767;
     }
 
     table {
@@ -49,62 +60,104 @@
     th {
         background-color: #4CAF50;
         color: #fff;
+        cursor: pointer;
     }
 
     tbody tr:nth-child(even) {
         background-color: #f2f2f2;
     }
+
+    .product-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    .product {
+        border: 2px solid #052767;
+        border-radius: 10px;
+        padding: 15px;
+        transition: border-color 0.3s ease-in-out;
+        background-color: #fff;
+        color: #052767;
+    }
+
+        .product:hover {
+            border-color: #4CAF50;
+        }
+
+    form {
+        margin-top: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        color: #052767;
+    }
+
+    input {
+        margin-bottom: 10px;
+        padding: 8px;
+        border: 1px solid #052767;
+        border-radius: 5px;
+    }
+
+    button {
+        background-color: #0a3ea1;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #052767;
+        }
 </style>
 
-<div class="sidebar">
-    <h3>All Products</h3>
+<div class="container">
+    <div class="sidebar">
+        <h3>Filter Products:</h3>
+        <form @onsubmit="FilterProducts">
+            <label for="minPrice">Min Price:</label>
+            <input type="number" id="minPrice" @bind="minPrice" />
 
-    <form @onsubmit="FilterProducts">
-        <label for="minPrice">Min Price:</label>
-        <input type="number" id="minPrice" @bind="minPrice" />
+            <label for="maxPrice">Max Price:</label>
+            <input type="number" id="maxPrice" @bind="maxPrice" />
 
-        <label for="maxPrice">Max Price:</label>
-        <input type="number" id="maxPrice" @bind="maxPrice" />
 
-        <button type="submit">Apply Filter</button>
-    </form>
-</div>
+            <button type="submit">Apply Filter</button>
+        </form>
+    </div>
 
-<div class="content">
-    <h3>List of products:</h3>
+    <div class="content">
+        <h3>List of Products:</h3>
 
-    @if (hardwareList == null)
-    {
-        <p>Loading...</p>
-    }
-    else if (hardwareList.Any())
-    {
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Price</th>
-                    <th>Seller Id</th>
-                </tr>
-            </thead>
-            <tbody>
+        @if (hardwareList == null)
+        {
+            <p>Loading...</p>
+        }
+        else if (hardwareList.Any())
+        {
+            <div class="product-container">
                 @foreach (var hardware in hardwareList)
                 {
-                    <tr>
-                        <td>@hardware.Name</td>
-                        <td>@hardware.Description</td>
-                        <td>@string.Format("{0:C}", hardware.Price)</td>
-                        <td>@hardware.SellerId</td>
-                    </tr>
+                    <div class="product">
+                        <p><strong>Name:</strong> @hardware.Name</p>
+                        <p><strong>Description:</strong> @hardware.Description</p>
+                        <p><strong>Price:</strong> @string.Format("{0:C}", hardware.Price)</p>
+                        <p><strong>Seller Id:</strong> @hardware.SellerId</p>
+                    </div>
                 }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <p>No hardware products found.</p>
-    }
+            </div>
+        }
+        else
+        {
+            <p>No hardware products found.</p>
+        }
+    </div>
 </div>
 
 @code {
@@ -112,13 +165,13 @@
     private DbService dbService;
     private decimal? minPrice;
     private decimal? maxPrice;
+    private bool alphabeticalOrder;
 
     protected override async Task OnInitializedAsync()
     {
         string connectionString = "Server=(localdb)\\Local;Database=master;Integrated Security=True;";
         dbService = new DbService(connectionString);
 
-        // Load hardware data from the database
         await LoadHardwareList();
     }
 
@@ -130,14 +183,20 @@
         }
         catch (Exception ex)
         {
-            //Error Handling (Log)
             Console.WriteLine($"Error loading hardware list: {ex.Message}");
         }
     }
 
     private async Task FilterProducts()
     {
-        await LoadHardwareList();
+        try
+        {
+            string sortOrder = alphabeticalOrder ? " ORDER BY Name, Price" : " ORDER BY Price";
+            hardwareList = await dbService.GetAllHardwareAsync(minPrice, maxPrice, sortOrder);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error filtering hardware list: {ex.Message}");
+        }
     }
-
 }

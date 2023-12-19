@@ -4,6 +4,17 @@
 <div class="container">
     <div class="row">
         <div class="col">
+            <h3>Tilføj Bruger</h3>
+            <div class="form-group">
+                <label for="newUserName">Navn:</label>
+                <input class="form-control" id="newUserName" @bind="newUserName" />
+
+                <label for="newUserEmail">Email:</label>
+                <input class="form-control" id="newUserEmail" @bind="newUserEmail" />
+
+                <button class="btn btn-success mt-2" @onclick="AddUser">Tilføj Bruger</button>
+            </div>
+
             <h3>Brugere</h3>
             <table class="table">
                 <thead>
@@ -28,20 +39,23 @@
                     }
                 </tbody>
             </table>
-
-            <h3>Tilføj Bruger</h3>
-            <div class="form-group">
-                <label for="newUserName">Navn:</label>
-                <input class="form-control" id="newUserName" @bind="newUserName" />
-
-                <label for="newUserEmail">Email:</label>
-                <input class="form-control" id="newUserEmail" @bind="newUserEmail" />
-
-                <button class="btn btn-success mt-2" @onclick="AddUser">Tilføj Bruger</button>
-            </div>
         </div>
 
         <div class="col">
+            <h3>Tilføj Produkt</h3>
+            <div class="form-group">
+                <label for="newHardwareName">Navn:</label>
+                <input class="form-control" id="newHardwareName" @bind="newHardwareName" />
+
+                <label for="newHardwarePrice">Pris:</label>
+                <input class="form-control" id="newHardwarePrice" @bind="newHardwarePrice" />
+
+                <label for="newHardwareSellerId">Sælger ID:</label>
+                <input class="form-control" id="newHardwareSellerId" @bind="newHardwareSellerId" />
+
+                <button class="btn btn-success mt-2" @onclick="AddHardware">Tilføj Produkt</button>
+            </div>
+
             <h3>Produkter</h3>
             <table class="table">
                 <thead>
@@ -68,20 +82,6 @@
                     }
                 </tbody>
             </table>
-
-            <h3>Tilføj Produkt</h3>
-            <div class="form-group">
-                <label for="newHardwareName">Navn:</label>
-                <input class="form-control" id="newHardwareName" @bind="newHardwareName" />
-
-                <label for="newHardwarePrice">Pris:</label>
-                <input class="form-control" id="newHardwarePrice" @bind="newHardwarePrice" />
-
-                <label for="newHardwareSellerId">Sælger ID:</label>
-                <input class="form-control" id="newHardwareSellerId" @bind="newHardwareSellerId" />
-
-                <button class="btn btn-success mt-2" @onclick="AddHardware">Tilføj Produkt</button>
-            </div>
         </div>
     </div>
 </div>
@@ -104,7 +104,6 @@
         hardwareList = dbManager.GetHardware() ?? new List<Hardware>();
     }
 
-    // Fjerner en bruger fra listen og opdaterer brugerlisten.
     void RemoveUser(Seller user)
     {
         if (user != null)
@@ -114,7 +113,6 @@
         }
     }
 
-    // Fjerner et produkt fra listen og opdaterer produktlisten.
     void RemoveHardware(Hardware hardware)
     {
         if (hardware != null)
@@ -124,7 +122,6 @@
         }
     }
 
-    // Tilføjer en ny bruger og opdaterer brugerlisten.
     void AddUser()
     {
         Seller newUser = new Seller
@@ -136,12 +133,10 @@
         dbManager.AddSeller(newUser);
         users = dbManager.GetSellers();
 
-        // Rydder inputfelterne.
         newUserName = "";
         newUserEmail = "";
     }
 
-    // Tilføjer et nyt produkt og opdaterer produktlisten.
     void AddHardware()
     {
         Hardware newHardware = new Hardware
@@ -154,7 +149,6 @@
         dbManager.AddHardware(newHardware);
         hardwareList = dbManager.GetHardware();
 
-        // Rydder inputfelterne.
         newHardwareName = "";
         newHardwarePrice = 0;
         newHardwareSellerId = 0;
