@@ -1,0 +1,63 @@
+﻿@page "/tilfojprodukt"
+@using BlazorApp.Data
+@using BlazorApp
+
+<h3>Tilføj Hardware Produkt</h3>
+
+@if (gemt)
+{
+    <p>Produktet er blevet gemt!</p>
+}
+else
+{
+    <form @onsubmit="GemProdukt">
+
+        <label>Beskrivelse:</label>
+        <textarea @bind="nytProdukt.Description"></textarea>
+
+        <label>Pris:</label>
+        <input type="number" @bind="nytProdukt.Price" />
+
+        <!-- Add more input fields as needed -->
+
+        <button type="submit">Gem Produkt</button>
+    </form>
+}
+
+@code {
+    private Hardware nytProdukt = new Hardware();
+    private bool gemt = false;
+
+    private DatabaseManager dbManager;
+
+    // Method called on page initialization.
+    protected override void OnInitialized()
+    {
+        dbManager = new DatabaseManager();
+    }
+
+    private void GemProdukt()
+    {
+        // Save the product in the database using DatabaseService
+        // You need to implement the code to save the data in your SQL database here
+
+        // Call the AddHardware method from DatabaseService to save the product
+        // DbContext.AddHardware(new Hardware
+        // {
+        //     Name = nytProdukt.Name,
+        //     Price = nytProdukt.Price,
+        //     SellerId = DbContext.GetSellers().FirstOrDefault(s => s.Name == nytProdukt.SellerName)?.SellerId ?? 0
+        //     // You need to customize this depending on your model and database structure
+        // });
+
+        dbManager.AddHardware(new Hardware
+            {
+                Name = nytProdukt.Name,
+                Price = nytProdukt.Price,
+                SellerId = dbManager.GetSellers().FirstOrDefault()?.SellerId ?? 0
+            });
+
+        // Mark that the product has been saved
+        gemt = true;
+    }
+}

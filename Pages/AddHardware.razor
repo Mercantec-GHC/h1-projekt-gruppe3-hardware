@@ -1,0 +1,90 @@
+﻿<!-- AddHardware.razor -->
+@using BlazorApp.Data
+@page "/addhardware"
+
+<style>
+    h3 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    div {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: inline-block;
+        width: 150px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    input, textarea {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+    }
+
+    button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #45a049;
+        }
+</style>
+
+<h3>Added a new product</h3>
+
+<EditForm Model="@newHardware" OnValidSubmit="@AddHardwareHandler">
+
+    <div>
+        <label>Name:</label>
+        <InputText @bind-Value="newHardware.Name" />
+    </div>
+
+
+    <div>
+        <label>Description:</label>
+        <InputTextArea @bind-Value="newHardware.Description" />
+    </div>
+
+    <div>
+        <label>Price:</label>
+        <InputNumber @bind-Value="newHardware.Price" />
+    </div>
+
+    <div>
+        <label>Seller Id:</label>
+        <InputNumber @bind-Value="newHardware.SellerId" />
+    </div>
+
+    <button type="submit">Save Product</button>
+</EditForm>
+
+@code {
+    private Hardware newHardware = new Hardware();
+    private DbService dbService;
+
+    protected override void OnInitialized()
+    {
+        // Konfigurer din databaseforbindelsesstreng
+        string connectionString = "Server=(localdb)\\Local;Database=master;Integrated Security=True;";
+        dbService = new DbService(connectionString);
+    }
+
+    private async Task AddHardwareHandler()
+    {
+
+        await dbService.AddHardwareAsync(newHardware);
+
+        // Nulstil inputfelterne
+        newHardware = new Hardware();
+
+    }
+}

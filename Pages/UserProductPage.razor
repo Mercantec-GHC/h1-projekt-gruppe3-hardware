@@ -1,0 +1,162 @@
+﻿@page "/userproduct"
+@using BlazorApp.Data
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h3>Brugere</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Navn</th>
+                        <th>Email</th>
+                        <th>Handlinger</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in users)
+                    {
+                        <tr>
+                            <td>@user.SellerId</td>
+                            <td>@user.Name</td>
+                            <td>@user.Email</td>
+                            <td>
+                                <button class="btn btn-danger" @onclick="() => RemoveUser(user)">Fjern</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <h3>Tilføj Bruger</h3>
+            <div class="form-group">
+                <label for="newUserName">Navn:</label>
+                <input class="form-control" id="newUserName" @bind="newUserName" />
+
+                <label for="newUserEmail">Email:</label>
+                <input class="form-control" id="newUserEmail" @bind="newUserEmail" />
+
+                <button class="btn btn-success mt-2" @onclick="AddUser">Tilføj Bruger</button>
+            </div>
+        </div>
+
+        <div class="col">
+            <h3>Produkter</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Navn</th>
+                        <th>Pris</th>
+                        <th>Sælger ID</th>
+                        <th>Handlinger</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var hardware in hardwareList)
+                    {
+                        <tr>
+                            <td>@hardware.HardwareId</td>
+                            <td>@hardware.Name</td>
+                            <td>@hardware.Price.ToString("C")</td>
+                            <td>@hardware.SellerId</td>
+                            <td>
+                                <button class="btn btn-danger" @onclick="() => RemoveHardware(hardware)">Fjern</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <h3>Tilføj Produkt</h3>
+            <div class="form-group">
+                <label for="newHardwareName">Navn:</label>
+                <input class="form-control" id="newHardwareName" @bind="newHardwareName" />
+
+                <label for="newHardwarePrice">Pris:</label>
+                <input class="form-control" id="newHardwarePrice" @bind="newHardwarePrice" />
+
+                <label for="newHardwareSellerId">Sælger ID:</label>
+                <input class="form-control" id="newHardwareSellerId" @bind="newHardwareSellerId" />
+
+                <button class="btn btn-success mt-2" @onclick="AddHardware">Tilføj Produkt</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    List<Seller> users;
+    List<Hardware> hardwareList;
+    string newUserName = "";
+    string newUserEmail = "";
+    string newHardwareName = "";
+    decimal newHardwarePrice = 0;
+    int newHardwareSellerId = 0;
+
+    DatabaseManager dbManager;
+
+    protected override void OnInitialized()
+    {
+        dbManager = new DatabaseManager();
+        users = dbManager.GetSellers() ?? new List<Seller>();
+        hardwareList = dbManager.GetHardware() ?? new List<Hardware>();
+    }
+
+    // Fjerner en bruger fra listen og opdaterer brugerlisten.
+    void RemoveUser(Seller user)
+    {
+        if (user != null)
+        {
+            dbManager.RemoveSeller(user.SellerId);
+            users = dbManager.GetSellers();
+        }
+    }
+
+    // Fjerner et produkt fra listen og opdaterer produktlisten.
+    void RemoveHardware(Hardware hardware)
+    {
+        if (hardware != null)
+        {
+            dbManager.RemoveHardware(hardware.HardwareId);
+            hardwareList = dbManager.GetHardware();
+        }
+    }
+
+    // Tilføjer en ny bruger og opdaterer brugerlisten.
+    void AddUser()
+    {
+        Seller newUser = new Seller
+            {
+                Name = newUserName,
+                Email = newUserEmail
+            };
+
+        dbManager.AddSeller(newUser);
+        users = dbManager.GetSellers();
+
+        // Rydder inputfelterne.
+        newUserName = "";
+        newUserEmail = "";
+    }
+
+    // Tilføjer et nyt produkt og opdaterer produktlisten.
+    void AddHardware()
+    {
+        Hardware newHardware = new Hardware
+            {
+                Name = newHardwareName,
+                Price = newHardwarePrice,
+                SellerId = newHardwareSellerId
+            };
+
+        dbManager.AddHardware(newHardware);
+        hardwareList = dbManager.GetHardware();
+
+        // Rydder inputfelterne.
+        newHardwareName = "";
+        newHardwarePrice = 0;
+        newHardwareSellerId = 0;
+    }
+}

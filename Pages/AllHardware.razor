@@ -1,0 +1,128 @@
+﻿@page "/allhardware"
+@using BlazorApp.Data
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Arial', sans-serif;
+        background: #f2f2f2;
+        display: flex;
+        height: 100vh;
+    }
+
+    .sidebar {
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 250px;
+        text-align: center;
+    }
+
+    .content {
+        flex: 1;
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+        overflow-x: auto;
+    }
+
+    h3 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #333;
+        text-align:center;
+    }
+
+    .card {
+        border: 2px solid #000;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease-in-out;
+    }
+
+        .card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    .card-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .card-text {
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+</style>
+
+<div class="sidebar">
+    <h3>List of products</h3>
+</div>
+
+<div class="content">
+    <h3></h3>
+
+    @if (hardwareList == null)
+    {
+        <p>Loading...</p>
+    }
+    else if (hardwareList.Any())
+    {
+        <div class="row">
+            @foreach (var hardware in hardwareList)
+            {
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">@hardware.Name</h5>
+                            <p class="card-text">@hardware.Description</p>
+                            <p class="card-text">Price: @string.Format("{0:C}", hardware.Price)</p>
+                            <p class="card-text">Seller ID: @hardware.SellerId</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>No hardware products found.</p>
+    }
+</div>
+
+@code {
+    private List<Hardware> hardwareList = new List<Hardware>();
+    private DbService dbService;
+
+    protected override async Task OnInitializedAsync()
+    {
+        string connectionString = "Server=(localdb)\\Local;Database=master;Integrated Security=True;";
+        dbService = new DbService(connectionString);
+
+        // Load hardware data from the database
+        await LoadHardwareList();
+    }
+
+    private async Task LoadHardwareList()
+    {
+        try
+        {
+            hardwareList = await dbService.GetAllHardwareAsync();
+        }
+        catch (Exception ex)
+        {
+            //Error Handling (Log)
+            Console.WriteLine($"Error loading hardware list: {ex.Message}");
+        }
+    }
+}
