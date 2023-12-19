@@ -6,22 +6,27 @@
         margin: 0;
         padding: 0;
         font-family: 'Arial', sans-serif;
-        background: linear-gradient(45deg, #052767, #3a0647);
-        height: 100vh;
+        background: #f2f2f2;
         display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+        height: 100vh;
     }
 
-    .hardware-list {
-        background: rgba(255, 255, 255, 0.9);
+    .sidebar {
+        background: #fff;
         padding: 20px;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        width: 100%;
-        text-align: center;
-        margin-top: 20px;
+        max-width: 250px;
+    }
+
+    .content {
+        flex: 1;
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+        overflow-x: auto;
     }
 
     h3 {
@@ -37,28 +42,41 @@
     }
 
     th, td {
-        padding: 10px;
+        padding: 12px;
         border: 1px solid #ddd;
     }
 
     th {
-        background-color: #00ff00;
+        background-color: #4CAF50;
         color: #fff;
+    }
+
+    tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
     }
 </style>
 
-<div class="hardware-list">
-    <h3>Alle hardwareprodukter</h3>
+<div class="sidebar">
+    <h3>All Products</h3>
+    
+</div>
 
-    @if (hardwareList != null && hardwareList.Any())
+<div class="content">
+    <h3>List of products:</h3>
+
+    @if (hardwareList == null)
+    {
+        <p>Loading...</p>
+    }
+    else if (hardwareList.Any())
     {
         <table>
             <thead>
                 <tr>
                     <th>Name</th>
+                    <th>Description</th>
                     <th>Price</th>
                     <th>Seller Id</th>
-                    <th>Seller Name</th>
                 </tr>
             </thead>
             <tbody>
@@ -66,7 +84,8 @@
                 {
                     <tr>
                         <td>@hardware.Name</td>
-                        <td>@hardware.Price</td>
+                        <td>@hardware.Description</td>
+                        <td>@string.Format("{0:C}", hardware.Price)</td>
                         <td>@hardware.SellerId</td>
                     </tr>
                 }
@@ -75,7 +94,7 @@
     }
     else
     {
-        <p>Ingen hardwareprodukter fundet.</p>
+        <p>No hardware products found.</p>
     }
 </div>
 
@@ -100,7 +119,7 @@
         }
         catch (Exception ex)
         {
-            // Error Message
+            //Error Handling (Log)
             Console.WriteLine($"Error loading hardware list: {ex.Message}");
         }
     }

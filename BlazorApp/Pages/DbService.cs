@@ -34,10 +34,10 @@ public class DbService
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandText = "INSERT INTO Hardware (Name, Description, Price, SellerId) VALUES (@Name, @Description, @Price, @SellerId)";
 
-                    cmd.Parameters.AddWithValue("@Name", (object)hardware.Name ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Description", (object)hardware.Description ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Price", hardware.Price);
-                    cmd.Parameters.AddWithValue("@SellerId", hardware.SellerId);
+                    cmd.Parameters.Add("@Name", SqlDbType.NVarChar).Value = hardware.Name as object ?? DBNull.Value;
+                    cmd.Parameters.Add("@Description", SqlDbType.NVarChar).Value = hardware.Description;
+                    cmd.Parameters.Add("@Price", SqlDbType.Decimal).Value = hardware.Price;
+                    cmd.Parameters.Add("@SellerId", SqlDbType.Int).Value = hardware.SellerId;
 
                     await cmd.ExecuteNonQueryAsync();
                 }
@@ -70,25 +70,15 @@ public class DbService
                     {
                         while (await reader.ReadAsync())
                         {
-                            try
+                            Hardware hardware = new Hardware
                             {
-                                Hardware hardware = new Hardware
-                                {
-                                    HardwareId = reader.GetInt32(reader.GetOrdinal("HardwareId")),
-                                    Name = reader.GetString(reader.GetOrdinal("Name")),
-                                    Description = reader.IsDBNull(reader.GetOrdinal("Description")) ? null : reader.GetString(reader.GetOrdinal("Description")),
-                                    Price = reader.GetDecimal(reader.GetOrdinal("Price")),
-                                    SellerId = reader.GetInt32(reader.GetOrdinal("SellerId"))
-                                };
+                                Name = reader["Name"].ToString(),
+                                Description = reader["Description"].ToString(),
+                                Price = (decimal)reader["Price"],
+                                SellerId = (int)reader["SellerId"]
+                            };
 
-                                hardware.EnsureNotNullValues();
-                                hardwareList.Add(hardware);
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine($"Error creating Hardware object: {ex.Message}");
-                                Console.WriteLine($"Problematic data - HardwareId: {reader["HardwareId"]}");
-                            }
+                            hardwareList.Add(hardware);
                         }
                     }
                 }
@@ -96,6 +86,7 @@ public class DbService
         }
         catch (Exception ex)
         {
+            // Handle the exception, e.g., log it or display an error message
             Console.WriteLine($"Error retrieving hardware: {ex.Message}");
         }
 

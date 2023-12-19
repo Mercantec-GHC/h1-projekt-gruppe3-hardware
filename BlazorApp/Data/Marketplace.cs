@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace BlazorApp.Data
+﻿namespace BlazorApp.Data
 {
     public class Marketplace
     {
@@ -10,14 +6,14 @@ namespace BlazorApp.Data
 
         public Seller potentialSeller = new Seller();
 
-        // Tilføj en sælger, så personen kan sælge produkter 
+        //Tilføj en sælger, så personen kan sælge produkter 
         public void AddSeller(Seller seller)
         {
             sellers.Add(seller);
         }
 
-        // Viser alle sælgere 
-        public void DisplayAllSellers()
+		//Viser alle sælgere 
+		public void DisplayAllSellers()
         {
             foreach (var seller in sellers)
             {
@@ -28,22 +24,8 @@ namespace BlazorApp.Data
             }
         }
 
-        // Viser alle trusted sælgere. (Sælgere med bedste rating)
-        public void DisplayTrustedSellers()
-        {
-            var trustedSellers = sellers.Where(seller => seller.Trusted == 1);
 
-            Console.WriteLine("Trusted Sellers:");
-            foreach (var seller in trustedSellers)
-            {
-                Console.WriteLine($"Seller: {seller.Name}");
-                Console.WriteLine($"Product: {seller.Product.Name}");
-                Console.WriteLine($"Price: {seller.Product.Price:C}");
-                Console.WriteLine("--------");
-            }
-        }
-
-        // Viser sælgere og deres produkter i forhold til deres pris 
+        //Viser sælgere og deres produkter i forhold til deres pris 
         public void DisplaySellersByPrice()
         {
             var sellersByPrice = sellers.OrderBy(seller => seller.Product.Price);
@@ -58,7 +40,7 @@ namespace BlazorApp.Data
             }
         }
 
-        // Giver brugeren mulighed for at søge efter produkter. 
+        //Giver brugeren mulighed for at søge efter produkter. 
         public void SearchProduct(string productName)
         {
             var matchingSellers = sellers.Where(seller => seller.Product.Name?.Contains(productName, StringComparison.OrdinalIgnoreCase) == true);
@@ -73,13 +55,13 @@ namespace BlazorApp.Data
             }
         }
 
-        // Mulighed for at tilføje et produkt/annonce 
+        //Mulighed for at tilføje et produkt/annonce 
         public void CreateAd(string email, string productName, decimal price)
         {
             Seller newSeller = new Seller
             {
                 Email = email,
-                Trusted = 0,
+
                 Product = new Hardware
                 {
                     Name = productName,
@@ -87,9 +69,7 @@ namespace BlazorApp.Data
                 }
             };
 
-            sellers.Add(newSeller);
+        }
+
         }
     }
-
-    // Define your Seller and Hardware classes here (assuming they are not provided in this snippet).
-}

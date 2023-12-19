@@ -1,7 +1,5 @@
 ﻿// Brugermodel klasse
 using Microsoft.Data.SqlClient;
-using System;
-using System.Collections.Generic;
 using System.Data;
 
 // Brugermodel klasse
@@ -17,11 +15,12 @@ public class UserModel
     public string Email { get; set; }
 }
 
+
 // Brugertjeneste
 public class UserService
 {
     // Forbindelsesstreng til databasen
-    private readonly string connectionString = "Data Source=(local);Initial Catalog=WebshopDB;Integrated Security=True";
+    string connectionString = "Server=(localdb)\\Local;Database=master;Integrated Security=True;";
 
     // Metode til at hente brugere fra databasen
     public List<UserModel> GetUsers()

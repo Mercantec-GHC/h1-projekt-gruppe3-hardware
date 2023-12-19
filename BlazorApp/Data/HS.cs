@@ -11,7 +11,6 @@ namespace ClassLibrary1
             {
                 Name = "Alice",
                 Email = "alice@example.com",
-                Trusted = 1,
                 Product = new Hardware
                 {
                     Name = "Gigabyte GeForce RTX 4090 GAMING OC 24G Grafikkort - 24GB GDDR6X - NVIDIA RTX 4090 - PCI Express 4.0 x16",
@@ -24,7 +23,6 @@ namespace ClassLibrary1
             {
                 Name = "Bob",
                 Email = "bob@example.com",
-                Trusted = 0,
                 Product = new Hardware
                 {
                     Name = "Cool Hardware",
@@ -32,20 +30,6 @@ namespace ClassLibrary1
                     Price = 149.99m
                 }
             };
-
-            // Tilføj sælger til markedspladsen
-            Marketplace marketplace = new Marketplace();
-            marketplace.AddSeller(seller1);
-            marketplace.AddSeller(seller2);
-
-            // Vis alle sælgere
-            marketplace.DisplayAllSellers();
-
-            // Vis kun trusted sælgere
-            marketplace.DisplayTrustedSellers();
-
-            // Vis sælgere sorteret efter pris
-            marketplace.DisplaySellersByPrice();
         }
     }
 }

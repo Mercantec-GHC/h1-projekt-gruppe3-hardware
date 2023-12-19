@@ -1,7 +1,6 @@
 ﻿<!-- AddHardware.razor -->
-@page "/addhardware"
 @using BlazorApp.Data
-@using System.Data.SqlClient
+@page "/addhardware"
 
 <style>
     h3 {
@@ -40,13 +39,15 @@
         }
 </style>
 
-<h3>Add new hardware product</h3>
+<h3>Added a new product</h3>
 
 <EditForm Model="@newHardware" OnValidSubmit="@AddHardwareHandler">
+
     <div>
-        <label>Product-Name:</label>
+        <label>Name:</label>
         <InputText @bind-Value="newHardware.Name" />
     </div>
+
 
     <div>
         <label>Description:</label>
@@ -60,10 +61,10 @@
 
     <div>
         <label>Seller Id:</label>
-        <span>5004</span>
+        <InputNumber @bind-Value="newHardware.SellerId" />
     </div>
 
-    <button type="submit">Save hardware</button>
+    <button type="submit">Save Product</button>
 </EditForm>
 
 @code {
@@ -72,37 +73,18 @@
 
     protected override void OnInitialized()
     {
+        // Konfigurer din databaseforbindelsesstreng
         string connectionString = "Server=(localdb)\\Local;Database=master;Integrated Security=True;";
         dbService = new DbService(connectionString);
     }
 
     private async Task AddHardwareHandler()
     {
-        try
-        {
-            newHardware.SellerId = 5004;
-            newHardware.EnsureNotNullValues();
 
-            await dbService.AddHardwareAsync(newHardware);
+        await dbService.AddHardwareAsync(newHardware);
 
-            // Reset input fields
-            newHardware = new Hardware();
-        }
-        catch (Exception ex)
-        {
-            // Print error details to the console
-            Console.WriteLine($"Error adding hardware: {ex.Message}");
+        // Nulstil inputfelterne
+        newHardware = new Hardware();
 
-            // Additional error details
-            if (ex.InnerException != null)
-            {
-                Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");
-            }
-
-
-
-            // Print stack trace
-            Console.WriteLine($"Stack Trace: {ex.StackTrace}");
-        }
     }
 }
