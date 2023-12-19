@@ -50,7 +50,7 @@ public class DbService
         }
     }
 
-    public async Task<List<Hardware>> GetAllHardwareAsync()
+    public async Task<List<Hardware>> GetAllHardwareAsync(decimal? minPrice = null, decimal? maxPrice = null)
     {
         List<Hardware> hardwareList = new List<Hardware>();
 
@@ -64,7 +64,21 @@ public class DbService
                 {
                     cmd.Connection = connection;
                     cmd.CommandType = CommandType.Text;
-                    cmd.CommandText = "SELECT * FROM Hardware";
+
+                    // Update the SQL query to include the price filter
+                    string query = "SELECT * FROM Hardware WHERE 1=1";
+                    if (minPrice.HasValue)
+                    {
+                        query += " AND Price >= @MinPrice";
+                        cmd.Parameters.Add("@MinPrice", SqlDbType.Decimal).Value = minPrice.Value;
+                    }
+                    if (maxPrice.HasValue)
+                    {
+                        query += " AND Price <= @MaxPrice";
+                        cmd.Parameters.Add("@MaxPrice", SqlDbType.Decimal).Value = maxPrice.Value;
+                    }
+
+                    cmd.CommandText = query;
 
                     using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
                     {

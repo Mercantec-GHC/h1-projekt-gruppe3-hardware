@@ -6,7 +6,7 @@ using System.Data;
 
 public class DatabaseManager
 {
-    private string connectionString = "Server=(localdb)\\Local;Database=master;Integrated Security=True;";
+    private string connectionString = "Server=(localdb)\\local;Database=master;Integrated Security=True;";
 
     public List<Seller> GetSellers()
     {
