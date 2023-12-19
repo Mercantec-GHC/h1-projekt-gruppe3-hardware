@@ -1,7 +1,5 @@
 ﻿using BlazorApp.Data;
 using Microsoft.Data.SqlClient;
-using System;
-using System.Collections.Generic;
 using System.Data;
 
 public class DatabaseManager
