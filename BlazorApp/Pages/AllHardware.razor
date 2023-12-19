@@ -66,6 +66,9 @@
         <label for="maxPrice">Max Price:</label>
         <input type="number" id="maxPrice" @bind="maxPrice" />
 
+        <label for="searchTerm">Search:</label>
+        <input type="text" id="searchTerm" @bind="searchTerm" />
+
         <button type="submit">Apply Filter</button>
     </form>
 </div>
@@ -112,6 +115,7 @@
     private DbService dbService;
     private decimal? minPrice;
     private decimal? maxPrice;
+    private string searchTerm;
 
     protected override async Task OnInitializedAsync()
     {
