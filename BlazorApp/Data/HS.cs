@@ -10,7 +10,6 @@ namespace ClassLibrary1
             Seller seller1 = new Seller
             {
                 Name = "Alice",
-                PhoneNumber = "+45 11111111",
                 Email = "alice@example.com",
                 Trusted = 1,
                 Product = new Hardware
@@ -24,7 +23,6 @@ namespace ClassLibrary1
             Seller seller2 = new Seller
             {
                 Name = "Bob",
-                PhoneNumber = "+45 22222222",
                 Email = "bob@example.com",
                 Trusted = 0,
                 Product = new Hardware

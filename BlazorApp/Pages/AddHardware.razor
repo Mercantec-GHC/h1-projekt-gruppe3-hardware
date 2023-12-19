@@ -99,14 +99,7 @@
                 Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");
             }
 
-            // Check for specific SQL-related exception
-            if (ex is SqlException sqlException)
-            {
-                for (int i = 0; i < sqlException.Errors.Count; i++)
-                {
-                    Console.WriteLine($"SqlError {i}: {sqlException.Errors[i].Message}");
-                }
-            }
+
 
             // Print stack trace
             Console.WriteLine($"Stack Trace: {ex.StackTrace}");
