@@ -29,6 +29,7 @@ public class DbService
 
                 using (SqlCommand cmd = new SqlCommand())
                 {
+                    //Oprettelse af produkt
                     cmd.Connection = connection;
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandText = "INSERT INTO Hardware (Name, Description, Price, SellerId) VALUES (@Name, @Description, @Price, @SellerId)";

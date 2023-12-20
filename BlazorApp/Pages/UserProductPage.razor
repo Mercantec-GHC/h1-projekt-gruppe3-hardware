@@ -3,21 +3,26 @@
 
 <div class="container">
     <div class="row">
+        <!-- Sektion for at tilføje brugere -->
         <div class="col">
             <h3>Tilføj Bruger</h3>
             <div class="form-group">
+                <!-- Input felter for nye brugere -->
                 <label for="newUserName">Navn:</label>
                 <input class="form-control" id="newUserName" @bind="newUserName" />
 
                 <label for="newUserEmail">Email:</label>
                 <input class="form-control" id="newUserEmail" @bind="newUserEmail" />
 
+                <!-- Knap til at tilføje brugere -->
                 <button class="btn btn-success mt-2" @onclick="AddUser">Tilføj Bruger</button>
             </div>
 
+            <!-- Viser listen af brugere -->
             <h3>Brugere</h3>
             <table class="table">
                 <thead>
+                    <!-- Table headers for brugerinformation -->
                     <tr>
                         <th>ID</th>
                         <th>Navn</th>
@@ -26,6 +31,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <!-- Looper igennem brugere og viser information -->
                     @foreach (var user in users)
                     {
                         <tr>
@@ -33,6 +39,7 @@
                             <td>@user.Name</td>
                             <td>@user.Email</td>
                             <td>
+                                <!-- Knap til at fjerne brugere -->
                                 <button class="btn btn-danger" @onclick="() => RemoveUser(user)">Fjern</button>
                             </td>
                         </tr>
@@ -41,9 +48,11 @@
             </table>
         </div>
 
+        <!-- Sektion til tilføjelse af Hardware Produkter -->
         <div class="col">
             <h3>Tilføj Produkt</h3>
             <div class="form-group">
+                <!-- Input felter for nyt hardware/nye produkter -->
                 <label for="newHardwareName">Navn:</label>
                 <input class="form-control" id="newHardwareName" @bind="newHardwareName" />
 
@@ -53,12 +62,15 @@
                 <label for="newHardwareSellerId">Sælger ID:</label>
                 <input class="form-control" id="newHardwareSellerId" @bind="newHardwareSellerId" />
 
+                <!-- Submit Knap for at tilføje nye produkter -->
                 <button class="btn btn-success mt-2" @onclick="AddHardware">Tilføj Produkt</button>
             </div>
 
+            <!-- Viser liste over produkter -->
             <h3>Produkter</h3>
             <table class="table">
                 <thead>
+                    <!-- Table headers for hardware produkt data -->
                     <tr>
                         <th>ID</th>
                         <th>Navn</th>
@@ -68,6 +80,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <!-- Looper igennem produkter og viser information -->
                     @foreach (var hardware in hardwareList)
                     {
                         <tr>
@@ -76,6 +89,7 @@
                             <td>@hardware.Price.ToString("C")</td>
                             <td>@hardware.SellerId</td>
                             <td>
+                                <!-- Knap til at fjerne et produkt -->
                                 <button class="btn btn-danger" @onclick="() => RemoveHardware(hardware)">Fjern</button>
                             </td>
                         </tr>
@@ -87,6 +101,7 @@
 </div>
 
 @code {
+    // Data and logic section
     List<Seller> users;
     List<Hardware> hardwareList;
     string newUserName = "";
@@ -97,6 +112,7 @@
 
     DatabaseManager dbManager;
 
+    // Initialization logic
     protected override void OnInitialized()
     {
         dbManager = new DatabaseManager();
@@ -104,6 +120,7 @@
         hardwareList = dbManager.GetHardware() ?? new List<Hardware>();
     }
 
+    // Metode for at fjerne brugere og produkter
     void RemoveUser(Seller user)
     {
         if (user != null)
@@ -122,6 +139,7 @@
         }
     }
 
+    // Metode for at tilføje brugere og produkter
     void AddUser()
     {
         Seller newUser = new Seller
@@ -133,6 +151,7 @@
         dbManager.AddSeller(newUser);
         users = dbManager.GetSellers();
 
+        // Clear input felter efter tilføjelse af bruger
         newUserName = "";
         newUserEmail = "";
     }
@@ -149,6 +168,7 @@
         dbManager.AddHardware(newHardware);
         hardwareList = dbManager.GetHardware();
 
+        // Clear input felter efter tilføjelse af produkt
         newHardwareName = "";
         newHardwarePrice = 0;
         newHardwareSellerId = 0;

@@ -1,5 +1,4 @@
-﻿// Brugermodel klasse
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using System.Data;
 
 // Brugermodel klasse
